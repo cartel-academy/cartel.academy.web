@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#0E5C46" />
+<meta name="theme-color" content="#122A40" />
 <title>Free Trading Tools — FX Cartel Academy</title>
 <meta name="description" content="Free live market ticker, Economic Calendar, Stock Screener, Stock Heatmap, and lot-size/pip calculators — no login required." />
 <link rel="canonical" href="https://cartel.academy/tools.html" />
@@ -34,11 +34,11 @@
 <script src="app-notify.js"></script>
 <style>
 :root{
-  --navy:#0E5C46;--navy-2:#2A6F5C;--gold:#F2A900;--gold-soft:#F7CB65;--gold-dark:#7D6428;--gold-2:#8E8C2E;
+  --navy:#125C53;--navy-2:#1A6D63;--gold:#FABC14;--gold-soft:#FCD673;--gold-dark:#8A6D2F;
   --bg:#FFFFFF;--bg-2:#F4F7F6;--surface:#FFFFFF;
   --paper:#FFFFFF;--ink:#0E2337;--muted:#4C6478;
   --line:rgba(14,35,55,.12);--white:#fff;--shadow:0 20px 60px rgba(0,0,0,.12);--radius:14px;
-  --bg-onDark:#0E5C46;--ink-onDark:#EAF1EF;--muted-onDark:#8FA6A2;--line-onDark:rgba(255,255,255,.10);
+  --bg-onDark:#122A40;--ink-onDark:#EAF1EF;--muted-onDark:#8FA6A2;--line-onDark:rgba(255,255,255,.10);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
@@ -54,9 +54,9 @@ img{max-width:100%;display:block}
 .btn-ghost{background:transparent;border:1px solid var(--line-onDark);color:var(--ink-onDark)}
 .btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
 .btn-sm{padding:8px 13px;font-size:13px}
-.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dark);font-weight:500;display:inline-block;padding:6px 14px;border-radius:999px;border:1px solid color-mix(in srgb, currentColor 45%, transparent);background:color-mix(in srgb, currentColor 12%, transparent)}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dark);font-weight:500}
 
-.topbar{position:sticky;top:0;z-index:40;background:var(--navy);border-bottom:1px solid var(--line-onDark)}
+.topbar{position:sticky;top:0;z-index:40;background:linear-gradient(120deg,#000 0%,var(--navy-2) 55%,var(--navy) 100%);border-bottom:1px solid var(--line-onDark)}
 .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
 .brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--gold)}
 .brand-logo{height:25px;width:auto;display:block}
@@ -156,7 +156,7 @@ img{max-width:100%;display:block}
 .calc-result{margin-top:14px;padding:12px 14px;background:var(--bg);border:1px solid var(--line);border-radius:10px;font-size:13.5px;color:var(--ink);min-height:20px;line-height:1.6}
 .tool-disclaimer{text-align:center;font-size:12px;color:var(--muted);margin-top:26px}
 
-footer{background:var(--navy);color:var(--paper);padding:40px 0 26px;margin-top:0}
+footer{background:#000;color:var(--paper);padding:40px 0 26px;margin-top:0}
 footer .wrap{display:flex;flex-direction:column;gap:14px}
 footer a{color:rgba(255,255,255,.75);text-decoration:none}
 footer a:hover{color:#fff}

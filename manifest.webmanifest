@@ -5,8 +5,8 @@
   "start_url": "portal.html",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0E5C46",
-  "theme_color": "#0E5C46",
+  "background_color": "#122A40",
+  "theme_color": "#122A40",
   "icons": [
     { "src": "icons/icon-192-v2.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
     { "src": "icons/icon-512-v2.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#0E5C46" />
+<meta name="theme-color" content="#122A40" />
 <script src="meta-pixel.js"></script>
 <title>Dashboard — FX Cartel Academy</title>
 <meta name="robots" content="noindex, nofollow" />
@@ -20,7 +20,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
 :root{
-  --navy:#0E5C46;--navy-2:#2A6F5C;--gold:#F2A900;--gold-soft:#F7CB65;--gold-dark:#7D6428;--gold-2:#8E8C2E;
+  --navy:#125C53;--navy-2:#1A6D63;--gold:#FABC14;--gold-soft:#FCD673;--gold-dark:#8A6D2F;
   --bg:#FFFFFF;--bg-2:#F4F7F6;--surface:#FFFFFF;
   --paper:#FFFFFF;--ink:#0E2337;--muted:#4C6478;
   --line:rgba(14,35,55,.12);--white:#fff;--shadow:0 20px 60px rgba(0,0,0,.45);
@@ -28,7 +28,7 @@
      use the repointed --ink/--muted/--line/--bg above — these preserve the
      original dark-mode values for those scoped selectors. Matches the same
      pattern used in index.html's light-mode conversion. */
-  --bg-onDark:#0E5C46;--ink-onDark:#EAF1EF;--muted-onDark:#8FA6A2;--line-onDark:rgba(255,255,255,.10);
+  --bg-onDark:#122A40;--ink-onDark:#EAF1EF;--muted-onDark:#8FA6A2;--line-onDark:rgba(255,255,255,.10);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
@@ -61,12 +61,12 @@ a{color:inherit;text-decoration:none}
 .install-modal ol li{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--ink)}
 .install-modal ol li .step-num{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--navy);color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;display:grid;place-items:center}
 .install-modal ol li b{color:var(--navy)}
-.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dark);font-weight:500;display:inline-block;padding:6px 14px;border-radius:999px;border:1px solid color-mix(in srgb, currentColor 45%, transparent);background:color-mix(in srgb, currentColor 12%, transparent)}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dark);font-weight:500}
 .phead .eyebrow{color:var(--gold)}
 .gate .eyebrow{color:var(--gold)}
 
 /* top */
-.topbar{position:sticky;top:0;z-index:40;background:var(--navy);border-bottom:1px solid var(--line-onDark)}
+.topbar{position:sticky;top:0;z-index:40;background:linear-gradient(120deg,#000 0%,var(--navy-2) 55%,var(--navy) 100%);border-bottom:1px solid var(--line-onDark)}
 .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:10px}
 .topbar-actions{display:flex;gap:10px;align-items:center;min-width:0}
 #whoami{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;max-width:220px;vertical-align:middle}
@@ -109,7 +109,7 @@ body.portal-active #backToSiteLink{display:none}
 /* layout */
 .portal-grid{display:grid;grid-template-columns:280px 1fr;gap:28px;padding:34px 0 70px}
 .side{position:sticky;top:88px;align-self:start}
-.acct-card{background:var(--navy);border:1px solid var(--line-onDark);border-radius:14px;padding:20px}
+.acct-card{background:linear-gradient(120deg,#000 0%,var(--navy-2) 55%,var(--navy) 100%);border:1px solid var(--line-onDark);border-radius:14px;padding:20px}
 .acct-card .aname{font-family:'Fraunces',serif;font-size:18px;color:var(--ink-onDark);margin-bottom:2px}
 .acct-card .acourse{font-size:12.5px;color:var(--muted-onDark);margin-bottom:16px}
 .acct-card .btn{width:100%;margin-bottom:8px}
@@ -117,7 +117,7 @@ body.portal-active #backToSiteLink{display:none}
 .acct-card .btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
 .acct-label{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-onDark);margin:16px 0 8px}
 .acct-note{background:rgba(255,255,255,.08);border-radius:10px;padding:12px 14px;font-size:12.5px;color:var(--muted-onDark);margin-top:12px}
-.folder{background:var(--navy);border:1px solid var(--line-onDark);border-radius:14px;margin-bottom:14px;overflow:hidden}
+.folder{background:linear-gradient(120deg,#000 0%,var(--navy-2) 55%,var(--navy) 100%);border:1px solid var(--line-onDark);border-radius:14px;margin-bottom:14px;overflow:hidden}
 .folder-head{padding:15px 18px;display:flex;align-items:center;gap:11px;font-weight:600;color:var(--ink-onDark);font-size:15px}
 .folder-head .fic{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.12);color:var(--gold);display:grid;place-items:center;font-size:15px;flex-shrink:0}
 .folder-body{border-top:1px solid var(--line-onDark)}
@@ -133,7 +133,7 @@ body.portal-active #backToSiteLink{display:none}
 .doc-row.done .doc-check{background:#3DDB8E;border-color:#3DDB8E;color:#0A121B}
 
 /* main content */
-.panel{background:var(--navy);border:1px solid var(--line-onDark);border-radius:16px;padding:26px;margin-bottom:24px}
+.panel{background:linear-gradient(120deg,#000 0%,var(--navy-2) 55%,var(--navy) 100%);border:1px solid var(--line-onDark);border-radius:16px;padding:26px;margin-bottom:24px}
 .panel h2{font-size:19px;color:var(--ink-onDark);margin-bottom:6px}
 .panel .psub{color:var(--muted-onDark);font-size:14px;margin-bottom:20px}
 .zoom-class{display:flex;align-items:center;gap:16px;padding:16px;border:1px solid var(--line-onDark);border-radius:12px;margin-bottom:12px;background:rgba(255,255,255,.06)}
@@ -172,7 +172,7 @@ body.portal-active #backToSiteLink{display:none}
 .vclose{background:none;border:none;color:var(--paper);font-size:26px;cursor:pointer;line-height:1}
 
 /* login gate */
-.gate{max-width:420px;margin:60px auto;background:var(--navy);border:1px solid var(--line-onDark);border-radius:16px;padding:32px;text-align:center}
+.gate{max-width:420px;margin:60px auto;background:linear-gradient(120deg,#000 0%,var(--navy-2) 55%,var(--navy) 100%);border:1px solid var(--line-onDark);border-radius:16px;padding:32px;text-align:center}
 .gate h2{font-size:22px;color:var(--ink-onDark);margin-bottom:8px}
 .gate p{color:var(--muted-onDark);font-size:14px;margin-bottom:22px}
 .field{text-align:left;margin-bottom:14px}
