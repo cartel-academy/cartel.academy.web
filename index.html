@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#122A40" />
+<script src="meta-pixel.js"></script>
+<title>FX Cartel Academy — Forex & Stock Trading Education | Abu Dhabi</title>
+<meta name="description" content="FX Cartel Academy — premium forex and stock trading education in Abu Dhabi. Structured mentorship for beginners to professional traders." />
+<link rel="canonical" href="https://cartel.academy/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="FX Cartel Academy" />
+<meta property="og:title" content="FX Cartel Academy — Forex & Stock Trading Education | Abu Dhabi" />
+<meta property="og:description" content="FX Cartel Academy — premium forex and stock trading education in Abu Dhabi. Structured mentorship for beginners to professional traders." />
+<meta property="og:url" content="https://cartel.academy/" />
+<meta property="og:image" content="https://cartel.academy/assets/hero-cartel-academy.jpg" />
+<meta property="og:image:width" content="1672" />
+<meta property="og:image:height" content="941" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="FX Cartel Academy — Forex & Stock Trading Education | Abu Dhabi" />
+<meta name="twitter:description" content="FX Cartel Academy — premium forex and stock trading education in Abu Dhabi. Structured mentorship for beginners to professional traders." />
+<meta name="twitter:image" content="https://cartel.academy/assets/hero-cartel-academy.jpg" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="FX Cartel" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  /* Brand — unchanged hues from the logo, kept as the site's only color
+     theme (navy/teal family + gold), just expressed in more shades so
+     they read correctly against a dark page instead of a white one. */
+  --navy:#125C53;
+  --navy-2:#1A6D63;
+  --gold:#FABC14;
+  --gold-soft:#FCD673;
+  --gold-dark:#8A6D2F; /* same gold hue, darkened for legible text/borders on the new white sections — already used inline elsewhere (ticker/live-dot) for exactly this reason */
+  --bg:#FFFFFF;       /* page background — white (was dark navy #122A40); see --*-onDark below for the sections that intentionally stay dark */
+  --bg-2:#F4F7F6;      /* alternate section tint — barely-there cool off-white, one notch off --bg */
+  --surface:#FFFFFF;   /* card/panel surface — white, distinguished via border+shadow rather than a color difference */
+  --paper:#FFFFFF;    /* kept literal white — still used where actual white is correct (e.g. text on navy) */
+  --ink:#0E2337;      /* body/heading text color — dark navy-blue, for the new white sections */
+  --muted:#4C6478;    /* secondary/muted text — medium blue-gray, contrast-checked against the new white/--bg-2 */
+  --line:rgba(14,35,55,.12);
+  --white:#ffffff;
+  --shadow:0 20px 60px rgba(0,0,0,.45);
+  --radius:14px;
+  /* Sections that intentionally stay dark (topbar, hero, mobile-nav drawer)
+     can't just use --ink/--muted/--line/--bg anymore now that those resolve
+     to the new light-mode values above — these preserve the exact original
+     dark-mode values for that handful of scoped selectors. */
+  --bg-onDark:#122A40;
+  --ink-onDark:#EAF1EF;
+  --muted-onDark:#8FA6A2;
+  --line-onDark:rgba(255,255,255,.10);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+h1,h2{font-family:'JetBrains Mono',monospace;font-weight:700;text-transform:uppercase;letter-spacing:.01em;line-height:1.22}
+h3,.serif{font-family:'Fraunces',Georgia,serif;font-weight:500;line-height:1.1;letter-spacing:-.01em}
+.mono{font-family:'JetBrains Mono',monospace}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 22px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-dark);font-weight:500}
+.hero .eyebrow{color:var(--gold)}
+section{padding:84px 0}
+.center{text-align:center}
+
+/* ---------- TOP BAR ---------- */
+.topbar{
+  /* Solid instead of translucent+blurred: backdrop-filter forces the
+     browser to resample everything behind this bar on every scroll
+     frame for as long as it's stuck to the top (i.e. the whole page) —
+     a real, measurable source of scroll jank on mid-range devices. */
+  position:sticky;top:0;z-index:60;
+  background:linear-gradient(120deg,#000 0%,var(--navy-2) 55%,var(--navy) 100%);
+  border-bottom:1px solid var(--line-onDark);
+}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:66px;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:20px;font-weight:600;letter-spacing:-.02em;color:var(--gold)}
+.brand-logo{height:26px;width:auto;display:block}
+.nav-links{display:flex;gap:26px;align-items:center}
+.nav-links a{position:relative;font-size:14px;font-weight:500;color:var(--ink-onDark);opacity:.82;transition:opacity .2s;padding-bottom:4px}
+.nav-links a:hover{opacity:1;color:var(--gold)}
+/* Sliding underline: a 2px bar that scales in from the left on hover/
+   focus, and stays scaled in — via the same .active class — under
+   whichever section is currently in view (see initActiveSectionNav()
+   in app.js). transform:scaleX is compositor-only, no layout cost. */
+.nav-links a::after,
+.nav-dropdown-toggle::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:2px;
+  background:var(--gold);border-radius:2px;
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .25s cubic-bezier(.16,.8,.24,1);
+}
+.nav-links a:hover::after, .nav-links a:focus-visible::after, .nav-links a.active::after,
+.nav-dropdown-toggle:hover::after, .nav-dropdown-toggle:focus-visible::after, .nav-dropdown-toggle.active::after{
+  transform:scaleX(1);
+}
+.nav-links a.active, .nav-dropdown-toggle.active{opacity:1;color:var(--gold)}
+/* Desktop "Company" sub-category dropdown — same click-to-toggle pattern
+   as the mobile drawer's .mn-group, just positioned as a floating panel
+   instead of an inline expanding list. */
+.nav-dropdown{position:relative}
+.nav-dropdown-toggle{position:relative;display:inline-flex;align-items:center;gap:4px;font:inherit;font-size:14px;font-weight:500;color:var(--ink-onDark);opacity:.82;background:none;border:none;padding:0 0 4px;cursor:pointer;transition:opacity .2s}
+.nav-dropdown-toggle:hover{opacity:1;color:var(--gold)}
+.nav-chevron{font-size:10px;transition:transform .2s}
+.nav-dropdown.open .nav-chevron{transform:rotate(180deg)}
+.nav-dropdown-menu{
+  position:absolute;top:calc(100% + 16px);left:50%;
+  transform:translate(-50%,-6px);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:8px;min-width:170px;box-shadow:var(--shadow);
+  opacity:0;visibility:hidden;transition:opacity .2s,transform .2s;z-index:70;
+}
+.nav-dropdown.open .nav-dropdown-menu{opacity:1;visibility:visible;transform:translate(-50%,0)}
+.nav-dropdown-menu a{display:block;padding:10px 14px;font-size:14px;font-weight:500;color:var(--ink);opacity:.85;border-radius:6px;white-space:nowrap;transition:background .15s,color .15s}
+.nav-dropdown-menu a:hover{opacity:1;background:var(--bg-2);color:var(--navy)}
+.top-cta{display:flex;gap:10px;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;border-radius:10px;padding:11px 18px;transition:transform .15s ease,box-shadow .2s ease,background .2s}
+/* square download icon button — keeps a fixed 1:1 ratio */
+.btn-icon{width:42px;height:42px;flex:0 0 42px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--gold);display:grid;place-items:center;cursor:pointer;transition:transform .15s,background .2s,border-color .2s,color .2s}
+.btn-icon:hover{background:var(--navy);color:var(--gold);border-color:var(--navy)}
+.btn-icon:active{transform:translateY(1px)}
+.btn-enroll{height:42px;padding:0 22px}
+/* Desktop/laptop nav already has "View courses" reachable via the
+   Courses link and the hero CTA, so the topbar Enroll button is
+   redundant there — kept only for mobile/tablet, where the collapsed
+   nav means it's the one visible CTA before opening the drawer. */
+@media(min-width:961px){
+  .btn-enroll{display:none}
+}
+.btn:active{transform:translateY(1px)}
+.btn-gold{background:var(--gold);color:var(--navy)}
+.btn-gold:hover{box-shadow:0 8px 22px rgba(250,188,20,.4)}
+.btn-navy{background:var(--navy);color:var(--paper)}
+.btn-navy:hover{background:var(--navy-2)}
+.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--navy);color:var(--navy)}
+/* The hero is still a dark background, so its one .btn-ghost ("Talk to an
+   advisor") needs the original light-on-dark treatment — every other
+   .btn-ghost (course cards, etc.) lives on the new white sections and
+   correctly uses the base rule above. */
+.hero .btn-ghost{border-color:var(--line-onDark);color:var(--ink-onDark)}
+.hero .btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn-wa{background:#1FA855;color:#fff}
+.btn-block{width:100%}
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:6px;flex-direction:column;gap:5px}
+.hamburger span{width:22px;height:2px;background:#fff;display:block;border-radius:2px}
+
+/* ---------- HERO ----------
+   Loads as a still photograph — crisp, no flicker, no layout shift —
+   then quietly comes to life: the first time the visitor moves the
+   mouse, touches, scrolls or presses a key, .hero-bg-video fades in
+   over it with a slight zoom-out and brightness lift (see
+   initHeroVideoReveal() in app.js), settles into a muted, looping
+   background, and the photo stays underneath as a permanent fallback.
+   .hero-bg-scrim layers the same navy already used elsewhere at a
+   gradient opacity so either layer reads, only darkening enough at
+   the bottom for text contrast. background-position shifts toward the
+   left/right on narrow screens so the branded wall signage stays in
+   frame instead of being cropped out by a tall, narrow viewport. */
+.hero{position:relative;overflow:hidden;padding:72px 0 96px}
+.hero-bg-photo{
+  position:absolute;inset:0;z-index:-2;
+  background-image:url('assets/hero-cartel-academy.jpg');
+  background-size:cover;background-position:center;
+}
+.hero-bg-video{
+  position:absolute;inset:0;z-index:-1;
+  width:100%;height:100%;object-fit:cover;object-position:center;
+  opacity:0;transform:scale(1.03);filter:brightness(.9);
+  transition:opacity 2.2s cubic-bezier(.16,.8,.24,1),
+             transform 2.6s cubic-bezier(.16,.8,.24,1),
+             filter 2.2s cubic-bezier(.16,.8,.24,1);
+  pointer-events:none;
+}
+.hero-bg-video.is-active{opacity:1;transform:scale(1);filter:brightness(1)}
+.hero-bg-scrim{
+  position:absolute;inset:0;z-index:0;
+  background:linear-gradient(180deg,
+    rgba(18,42,64,.35) 0%,
+    rgba(18,42,64,.5) 55%,
+    rgba(18,42,64,.72) 100%);
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-bg-video{display:none}
+}
+.hero .wrap{position:relative;z-index:1}
+.hero-copy{max-width:760px;margin:0 auto;text-align:center}
+.hero-copy .hero-actions{justify-content:center}
+.hero h1{font-size:clamp(28px,4.4vw,50px);color:var(--ink-onDark);margin:16px 0 18px}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero p.lead{font-size:17px;color:var(--muted-onDark);max-width:560px;margin:0 auto 28px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+
+/* ---------- BRAND MARQUEE ----------
+   Full-bleed, single-line, edge-to-edge scrolling strip, sitting
+   between the hero and the stat block. The track holds the same
+   phrase twelve times in a row and animates translateX(0 -> -50%) —
+   since the first half and second half of the track are identical,
+   the loop point is invisible. Twelve copies (not just two) keeps the
+   strip comfortably wider than even an ultra-wide desktop viewport,
+   so there's never a visible gap. mask-image fades both edges so the
+   text visually reads as running off either side rather than getting
+   clipped mid-character. Paused on hover (desktop) as a small
+   courtesy for anyone trying to read it. */
+.brand-marquee{
+  overflow:hidden;background:var(--bg);padding:14px 0;
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 4%,#000 96%,transparent);
+  mask-image:linear-gradient(to right,transparent,#000 4%,#000 96%,transparent);
+}
+.marquee-track{display:flex;width:max-content;animation:marqueeScroll 32s linear infinite;will-change:transform}
+.brand-marquee:hover .marquee-track{animation-play-state:paused}
+.marquee-item{
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--navy);
+  white-space:nowrap;padding:0 30px;border-right:1px solid var(--line);
+}
+@keyframes marqueeScroll{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(-50%)}
+}
+@media(max-width:640px){
+  .brand-marquee{padding:11px 0}
+  .marquee-item{font-size:10.5px;letter-spacing:.1em;padding:0 18px}
+}
+@media(prefers-reduced-motion:reduce){
+  .marquee-track{animation:none}
+}
+
+/* ---------- BIG STAT NUMBERS ---------- */
+.stat-block{background:var(--bg);padding:64px 0}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;text-align:center}
+.stat-item{display:flex;flex-direction:column;gap:6px}
+.stat-num{font-family:'Fraunces',serif;font-size:clamp(32px,5.2vw,58px);font-weight:600;color:var(--navy);line-height:1}
+.stat-lab{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+@media(max-width:760px){
+  .stat-block{padding:44px 0}
+  .stat-grid{grid-template-columns:repeat(2,1fr);gap:28px 20px}
+}
+
+
+/* ---------- SECTION HEADINGS ---------- */
+.sec-head{max-width:640px;margin-bottom:44px}
+.sec-head.center{margin-left:auto;margin-right:auto}
+.sec-head h2{font-size:clamp(22px,2.6vw,32px);color:var(--ink);margin:12px 0 12px}
+.sec-head p{color:var(--muted);font-size:16px}
+
+/* ---------- SCROLL REVEAL ----------
+   Elements fade + rise into place the first time they cross into view
+   (see initScrollReveal() in app.js). The sitewide prefers-reduced-motion
+   rule further down (transition:none!important) makes this apply
+   instantly with no animation for those users, rather than leaving
+   content stuck invisible. */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.16,.8,.3,1),transform .7s cubic-bezier(.16,.8,.3,1)}
+.reveal.show{opacity:1;transform:translateY(0)}
+
+/* ---------- LOGOS / VALUES ---------- */
+.values{background:var(--bg)}
+.val-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.val{padding:28px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);transition:border-color .2s}
+.val:hover{border-color:var(--navy)}
+.val .ic{width:44px;height:44px;border-radius:11px;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-size:20px;margin-bottom:14px}
+.val h3{font-size:19px;color:var(--ink);margin-bottom:7px}
+.val p{font-size:14.5px;color:var(--muted)}
+
+/* ---------- SKILLS (What you'll master) ---------- */
+.skills{background:var(--bg-2)}
+.skills .val{background:var(--surface)}
+
+/* ---------- BROKERS / TOOLS STRIP ---------- */
+.partners{background:var(--bg);padding:50px 0}
+.partners .plabel{text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+.partners .prow{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap;margin-bottom:36px}
+.partners .prow:last-child{margin-bottom:0}
+.partners .prow img{height:40px;width:auto;filter:grayscale(15%);opacity:.92;transition:opacity .2s,transform .2s}
+.partners .prow img:hover{opacity:1;transform:translateY(-2px)}
+
+/* ---------- MENTORS (quiet portrait row) ----------
+   Photography and a name in alt text stand in for icons and captions —
+   no name/role/bio card clutter, just the faces teaching the courses. */
+.mentors-row{background:var(--bg)}
+.mentor-row{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.mentor-row img{width:150px;aspect-ratio:3/4;object-fit:cover;border-radius:14px;border:1px solid var(--line)}
+.mentors-more{text-align:center;margin-top:26px}
+.mentors-more a{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.04em;color:var(--gold-dark);border-bottom:1px solid var(--gold-dark);padding-bottom:2px}
+
+/* ---------- 360 CAMPUS GALLERY ----------
+   Radius is set just under the trig no-gap value for a closed n-gon
+   (r = w / (2*tan(180/n))) so the 5 photo faces sit edge-to-edge with a
+   slight overlap instead of showing background through wedge-shaped
+   gaps as the ring turns. */
+.gallery360{background:var(--bg-2);overflow:hidden}
+.g360-band{background:var(--navy) url('assets/brand-bg.jpg') center/cover no-repeat;padding:56px 0 56px}
+.g360-band .eyebrow{color:var(--gold)}
+.g360-band h2{color:#fff}
+.g360-band p{color:rgba(255,255,255,.75)}
+@media(max-width:600px){
+  .g360-band{padding:44px 0 44px}
+  .g360-stage{margin-top:-44px}
+}
+.g360-stage{
+  --g360-w:230px;--g360-h:300px;
+  position:relative;z-index:1;
+  overflow:hidden;
+  margin-top:-56px;
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 4%,#000 96%,transparent);
+  mask-image:linear-gradient(to right,transparent,#000 4%,#000 96%,transparent);
+}
+.g360-track{
+  display:flex;align-items:center;gap:22px;width:max-content;
+  animation:g360scroll 24s linear infinite;
+  will-change:transform;
+}
+.g360-stage:hover .g360-track{animation-play-state:paused}
+.g360-item{
+  position:relative;flex:0 0 auto;width:var(--g360-w);height:var(--g360-h);
+  border-radius:16px;overflow:hidden;
+  box-shadow:var(--shadow);border:3px solid var(--surface);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease,filter .35s ease;
+}
+.g360-item:hover{
+  transform:scale(1.16);
+  box-shadow:0 30px 70px rgba(0,0,0,.55),0 0 0 3px var(--gold);
+  filter:brightness(1.1) saturate(1.12);
+  z-index:5;
+}
+.g360-item img{width:100%;height:100%;object-fit:cover;display:block}
+/* Track holds the image set twice back-to-back — scrolling exactly to
+   -50% (one full original-set width) then repeating looks seamless
+   instead of jumping back to the start. */
+@keyframes g360scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.g360-hint{text-align:center;font-size:12px;color:var(--muted);margin-top:18px;font-family:'JetBrains Mono',monospace;letter-spacing:.04em}
+@media(hover:none){.g360-hint .hover-only{display:none}}
+
+
+/* ---------- COURSES ---------- */
+.courses{background:var(--bg)}
+.course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
+.course{background:linear-gradient(165deg,rgba(18,92,83,.10),var(--surface) 55%);border:1px solid var(--line);border-radius:18px;padding:28px;display:flex;flex-direction:column;position:relative;transition:border-color .2s}
+.course:hover{border-color:var(--navy)}
+.course.feature{border:1.5px solid var(--gold)}
+.course .tag{position:absolute;top:18px;right:18px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dark);border:1px solid var(--gold-dark);padding:4px 8px;border-radius:20px}
+.course .cname{font-family:'Fraunces',serif;font-size:23px;color:var(--navy);font-weight:600;margin-bottom:4px}
+.course .cdesc{font-size:14px;color:var(--muted);margin-bottom:18px;min-height:60px}
+.course .price{display:flex;align-items:baseline;gap:6px;margin-bottom:2px}
+.course .price .num{font-family:'Fraunces',serif;font-size:38px;color:var(--ink);font-weight:600}
+.course .price .cur{font-size:15px;color:var(--muted);font-weight:600}
+.course .price .free{font-family:'Fraunces',serif;font-size:32px;color:#000;font-weight:600}
+.course .pnote{font-size:12px;color:var(--muted);margin-bottom:20px}
+.course ul{list-style:none;margin:0 0 22px;display:flex;flex-direction:column;gap:9px}
+.course ul li{font-size:13.5px;color:var(--ink);display:flex;gap:9px;align-items:flex-start}
+.course ul li:before{content:"✓";color:var(--gold-dark);font-weight:700;flex-shrink:0}
+.course .c-actions{margin-top:auto;display:flex;flex-direction:column;gap:9px}
+
+/* ---------- TESTIMONIALS ---------- */
+.testi{background:var(--navy) url('assets/brand-bg.jpg') center/cover no-repeat;color:var(--paper)}
+.testi .sec-head h2{color:var(--white)}
+.testi .sec-head p{color:rgba(255,255,255,.65)}
+.testi .eyebrow{color:var(--gold-soft)}
+.testi-carousel{position:relative}
+.t-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.t-grid::-webkit-scrollbar{display:none}
+.t-slide{display:flex;flex-direction:column;gap:20px;flex:0 0 100%;scroll-snap-align:start;padding:0 2px}
+.t-slide .t-card{flex:1}
+.t-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.t-card p{font-size:14.5px;color:rgba(255,255,255,.9);line-height:1.65}
+.t-who{display:flex;align-items:center;gap:12px;margin-top:auto}
+.t-av{width:44px;height:44px;border-radius:50%;background:linear-gradient(150deg,var(--gold),var(--gold-soft));display:grid;place-items:center;color:var(--navy);font-weight:700;font-family:'Fraunces',serif;font-size:17px}
+.t-name{font-weight:600;font-size:14px;color:var(--white)}
+.t-role{font-size:12px;color:var(--gold-soft)}
+.stars{color:var(--gold);font-size:13px;letter-spacing:2px}
+.t-arrow{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(18,42,64,.85);color:var(--white);font-size:19px;line-height:1;display:grid;place-items:center;cursor:pointer;z-index:3}
+.t-arrow-prev{left:2px}
+.t-arrow-next{right:2px}
+.t-arrow[disabled]{opacity:.3;cursor:default}
+.t-dots{display:flex;justify-content:center;gap:8px;margin-top:22px}
+.t-dot{width:8px;height:8px;border-radius:50%;border:none;background:rgba(255,255,255,.25);cursor:pointer;padding:0;transition:background .2s,transform .2s}
+.t-dot.active{background:var(--gold);transform:scale(1.25)}
+@media(min-width:700px){
+  .t-slide{flex-direction:row;gap:20px}
+}
+@media(max-width:640px){
+  .t-arrow{display:none}
+}
+
+/* ---------- FAQ ---------- */
+.faq{background:var(--bg)}
+.faq-list{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.faq-item{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.faq-q{width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:19px 22px;font-size:15.5px;font-weight:600;color:var(--ink);display:flex;justify-content:space-between;align-items:center;gap:14px;font-family:'Inter',sans-serif}
+.faq-q .plus{flex-shrink:0;width:22px;height:22px;position:relative;transition:transform .25s}
+.faq-q .plus:before,.faq-q .plus:after{content:"";position:absolute;background:var(--gold);border-radius:2px}
+.faq-q .plus:before{left:50%;top:2px;bottom:2px;width:2px;transform:translateX(-50%)}
+.faq-q .plus:after{top:50%;left:2px;right:2px;height:2px;transform:translateY(-50%)}
+.faq-item.open .plus{transform:rotate(135deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;color:var(--muted);font-size:14.5px}
+.faq-a div{padding:0 22px 20px}
+.faq-item.open .faq-a{max-height:320px}
+
+/* ---------- CONTACT ---------- */
+.contact{background:var(--bg-2)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.contact-info{display:flex;flex-direction:column;gap:22px}
+.ci-block{display:flex;gap:14px;align-items:flex-start}
+.ci-ic{width:42px;height:42px;border-radius:11px;background:var(--navy);color:var(--gold);display:grid;place-items:center;flex-shrink:0;font-size:18px}
+.ci-block h4{font-size:14px;color:var(--ink);margin-bottom:3px}
+.ci-block p,.ci-block a{font-size:14px;color:var(--muted);line-height:1.5}
+.ci-block a:hover{color:var(--gold-dark)}
+.form-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:28px}
+.form-card h3{font-size:22px;color:var(--ink);margin-bottom:6px}
+.form-card p.fsub{font-size:14px;color:var(--muted);margin-bottom:20px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.field input,.field textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px;font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);transition:border .2s}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--gold-dark)}
+.field textarea{resize:vertical;min-height:90px}
+.checkbox-row{display:flex;gap:9px;align-items:center;margin-bottom:16px;font-size:13px;color:var(--muted)}
+
+/* ---------- FOOTER ---------- */
+footer{background:#000;color:var(--paper);padding:60px 0 26px}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:34px;margin-bottom:40px}
+.foot-brand .brand{color:var(--white)}
+.foot-brand p{font-size:13.5px;color:rgba(255,255,255,.6);margin-top:14px;line-height:1.7}
+.foot-col h4{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-family:'JetBrains Mono',monospace;font-weight:500}
+.foot-col a{display:block;font-size:14px;color:rgba(255,255,255,.75);margin-bottom:10px;transition:color .2s}
+.foot-col a:hover{color:var(--white)}
+.socials{display:flex;gap:10px;margin-top:16px}
+.socials a{width:38px;height:38px;border-radius:9px;border:1px solid rgba(255,255,255,.15);display:grid;place-items:center;font-size:12px;color:var(--paper);transition:background .2s,border .2s}
+.socials a:hover{background:var(--gold);color:var(--navy);border-color:var(--gold)}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.12);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:13px;color:rgba(255,255,255,.5)}
+
+/* ---------- FLOATING CONTACT BUBBLES ---------- */
+.fab-wa{position:fixed;bottom:22px;right:22px;z-index:50;width:56px;height:56px;border-radius:50%;background:#1FA855;color:#fff;display:grid;place-items:center;box-shadow:0 10px 30px rgba(31,168,85,.45);font-size:26px;transition:transform .2s}
+.fab-wa:hover{transform:scale(1.08)}
+.fab-call{position:fixed;bottom:88px;right:22px;z-index:50;width:56px;height:56px;border-radius:50%;background:var(--gold);color:var(--navy);display:grid;place-items:center;box-shadow:0 10px 30px rgba(250,188,20,.45);font-size:24px;transition:transform .2s}
+.fab-call:hover{transform:scale(1.08)}
+@media(max-width:600px){
+  .fab-wa{bottom:18px;right:18px;width:50px;height:50px;font-size:22px}
+  .fab-call{bottom:76px;right:18px;width:50px;height:50px;font-size:20px}
+}
+
+/* ---------- SLIDE-IN CHECKOUT ---------- */
+.overlay{position:fixed;inset:0;background:rgba(7,37,33,.6);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .3s;z-index:90}
+.overlay.show{opacity:1;visibility:visible}
+.checkout{position:fixed;top:0;right:0;height:100%;width:40%;min-width:400px;max-width:520px;background:var(--bg);z-index:100;transform:translateX(100%);transition:transform .38s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.5)}
+.checkout.show{transform:translateX(0)}
+.co-head{padding:24px 26px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.co-head h3{font-size:20px;color:var(--ink)}
+.co-close{background:none;border:none;cursor:pointer;font-size:26px;color:var(--muted);line-height:1;padding:2px 6px}
+.co-body{padding:26px;overflow-y:auto;flex:1}
+.co-item{display:flex;justify-content:space-between;align-items:flex-start;padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:22px}
+.co-item .ci-name{font-family:'Fraunces',serif;font-size:18px;color:var(--ink);font-weight:600}
+.co-item .ci-meta{font-size:12.5px;color:var(--muted);margin-top:3px}
+.co-item .ci-price{font-family:'Fraunces',serif;font-size:22px;color:var(--navy);font-weight:600;white-space:nowrap}
+.co-section-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:22px 0 12px}
+.summary{border-top:1px dashed var(--line);margin-top:8px;padding-top:16px}
+.sum-row{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);margin-bottom:9px}
+.sum-row.total{font-size:17px;color:var(--ink);font-weight:700;font-family:'Inter',sans-serif;margin-top:6px}
+.sum-row.total b{font-family:'Fraunces',serif}
+.pay-methods{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.pay-chip{border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:12px;font-weight:600;color:var(--ink);background:var(--surface);display:flex;align-items:center;gap:6px}
+.co-foot{padding:22px 26px;border-top:1px solid var(--line);background:var(--bg)}
+.secured{display:flex;align-items:center;justify-content:center;gap:7px;font-size:12px;color:var(--muted);margin-top:12px}
+.free-badge{background:rgba(61,219,142,.14);color:#3DDB8E;border:1px solid rgba(61,219,142,.35);font-size:12px;font-weight:600;padding:10px 14px;border-radius:10px;text-align:center;margin-bottom:16px}
+
+/* ---------- INSTALL INSTRUCTIONS MODAL (Safari has no install prompt) ---------- */
+.install-modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px);z-index:120;display:none;align-items:center;justify-content:center;padding:20px}
+.install-modal-backdrop.show{display:flex}
+.install-modal{background:var(--surface);border-radius:18px;max-width:380px;width:100%;padding:28px;box-shadow:var(--shadow)}
+.install-modal h3{font-size:20px;color:var(--ink);margin-bottom:6px}
+.install-modal .im-sub{font-size:13.5px;color:var(--muted);margin-bottom:18px}
+.install-modal ol{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.install-modal ol li{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--ink)}
+.install-modal ol li .step-num{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--navy);color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;display:grid;place-items:center}
+.install-modal ol li b{color:var(--navy)}
+
+.success-modal-backdrop{position:fixed;inset:0;background:rgba(7,37,33,.7);backdrop-filter:blur(3px);z-index:130;display:none;align-items:center;justify-content:center;padding:20px}
+.success-modal-backdrop.show{display:flex}
+.success-modal{background:var(--surface);border-radius:18px;max-width:400px;width:100%;padding:32px;box-shadow:var(--shadow);text-align:center}
+.success-modal .success-icon{width:52px;height:52px;margin:0 auto 16px;border-radius:50%;background:rgba(250,188,20,.16);border:1px solid rgba(250,188,20,.4);color:var(--gold-dark);font-size:26px;display:grid;place-items:center}
+.success-modal h3{font-size:20px;color:var(--ink);margin-bottom:8px}
+.success-modal .success-sub{font-size:14.5px;color:var(--ink);opacity:.9;margin-bottom:14px}
+.success-modal .success-note{font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.5}
+.success-modal .success-note b{color:var(--navy);font-weight:600}
+.success-modal .dismiss{display:block;width:100%;background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;margin-top:14px;padding:4px}
+.success-modal .dismiss:hover{color:var(--ink)}
+
+/* ---------- BACKEND CONNECTION TOAST ---------- */
+.fxc-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(14px);opacity:0;pointer-events:none;transition:transform .3s ease,opacity .3s ease;background:#0C1A17;color:#fff;padding:14px 16px;border-radius:12px;box-shadow:0 16px 40px rgba(0,0,0,.32);font-size:13px;line-height:1.5;max-width:min(92vw,420px);z-index:200;display:flex;align-items:flex-start;gap:10px}
+.fxc-toast.show{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
+.fxc-toast b{color:var(--gold-soft)}
+.fxc-toast .fxc-toast-close{margin-left:auto;flex-shrink:0;background:none;border:none;color:rgba(255,255,255,.55);cursor:pointer;font-size:17px;line-height:1;padding:0 0 0 6px}
+.fxc-toast .fxc-toast-close:hover{color:#fff}
+
+/* ---------- MOBILE ---------- */
+@media(max-width:960px){
+  .val-grid,.course-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .checkout{width:100%;min-width:0;max-width:none}
+  section{padding:60px 0}
+  .hero{padding:56px 0}
+  .hero-bg-photo{background-position:75% center}
+  .hero-bg-video{object-position:75% center}
+  .g360-stage{--g360-w:180px;--g360-h:230px}
+}
+@media(max-width:640px){
+  .wrap{padding:0 16px}
+  .topbar .wrap{height:60px;gap:8px}
+  .brand{font-size:18px}
+  .brand-logo{height:22px}
+  /* header buttons keep fixed ratio — never stretch */
+  .btn-icon{width:38px;height:38px;flex:0 0 38px}
+  .btn-enroll{height:38px;padding:0 16px;font-size:13px}
+  .hero{padding:44px 0 64px}
+  .hero h1{font-size:clamp(28px,8vw,40px)}
+  .hero-actions{gap:10px}
+  .hero-actions .btn{flex:1;min-width:0;padding:12px 10px}
+  .sec-head{margin-bottom:32px}
+  .course{padding:22px}
+  .co-head{padding:18px 20px}
+  .co-body{padding:20px}
+  .co-foot{padding:18px 20px}
+  .mentor-row{gap:14px}
+  .mentor-row img{width:calc(50% - 7px)}
+  .foot-grid{grid-template-columns:1fr;gap:26px}
+  .g360-stage{--g360-w:150px;--g360-h:196px}
+  .g360-track{gap:14px}
+}
+@media(max-width:380px){
+  .brand{font-size:16px}
+  .btn-enroll{padding:0 13px}
+  .top-cta{gap:7px}
+}
+/* mobile nav drawer */
+.mobile-nav{position:fixed;inset:0;background:linear-gradient(135deg,#000 0%,var(--navy-2) 55%,var(--navy) 100%);z-index:80;transform:translateX(100%);transition:transform .3s;display:flex;flex-direction:column;padding:80px 30px 30px;overflow-y:auto}
+.mobile-nav.show{transform:translateX(0)}
+.mobile-nav a{font-family:'Fraunces',serif;font-size:26px;color:var(--ink-onDark);padding:16px 0;border-bottom:1px solid var(--line-onDark);border-left:2px solid transparent;transition:color .2s,border-color .2s}
+.mobile-nav a.active{color:var(--gold);border-left-color:var(--gold);padding-left:10px}
+.mobile-nav .mn-close{position:absolute;top:22px;right:24px;font-size:30px;background:none;border:none;color:var(--gold);cursor:pointer}
+/* grouped sub-category (e.g. "Company" -> CEO Message / Our Team / Testimonials) */
+.mn-group-head{display:flex;align-items:center;justify-content:space-between;width:100%;font:inherit;font-family:'Fraunces',serif;font-size:26px;color:var(--ink-onDark);background:none;border:none;border-left:2px solid transparent;text-align:left;padding:16px 0;border-bottom:1px solid var(--line-onDark);cursor:pointer;transition:color .2s,border-color .2s}
+.mn-group-head.active{color:var(--gold);border-left-color:var(--gold);padding-left:10px}
+.mn-chevron{font-size:16px;color:var(--gold);transition:transform .25s;flex-shrink:0;margin-left:12px}
+.mn-group.open .mn-chevron{transform:rotate(180deg)}
+.mn-submenu{max-height:0;overflow:hidden;transition:max-height .3s ease;display:flex;flex-direction:column}
+.mn-group.open .mn-submenu{max-height:280px}
+.mobile-nav .mn-submenu a{font-size:19px;padding:12px 0 12px 20px;opacity:.85}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "EducationalOrganization",
+      "@id": "https://cartel.academy/#organization",
+      "name": "FX Cartel Academy",
+      "alternateName": "Cartel Academy",
+      "url": "https://cartel.academy/",
+      "logo": "https://cartel.academy/assets/logo.png",
+      "image": "https://cartel.academy/assets/hero-cartel-academy.jpg",
+      "description": "FX Cartel Academy — premium forex and stock trading education in Abu Dhabi. Structured mentorship for beginners to professional traders.",
+      "telephone": "+971508841001",
+      "email": "info@fxcartel.ae",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Building No: P-50, Tower D, Room No: 902, Baghdad Street, Al Danah",
+        "addressLocality": "Abu Dhabi",
+        "addressCountry": "AE"
+      },
+      "areaServed": ["AE", "GB", "IN"],
+      "hasCourse": [
+        { "@id": "https://cartel.academy/#course-free" },
+        { "@id": "https://cartel.academy/#course-master" },
+        { "@id": "https://cartel.academy/#course-pro" }
+      ]
+    },
+    {
+      "@type": "Course",
+      "@id": "https://cartel.academy/#course-free",
+      "name": "FXC Free",
+      "description": "A single complimentary introductory session — online or in person at our Abu Dhabi office. A foundational overview for absolute beginners.",
+      "provider": { "@id": "https://cartel.academy/#organization" },
+      "hasCourseInstance": {
+        "@type": "CourseInstance",
+        "courseMode": ["online", "onsite"],
+        "courseWorkload": "1 introductory session"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "AED",
+        "category": "Free",
+        "url": "https://cartel.academy/#courses"
+      }
+    },
+    {
+      "@type": "Course",
+      "@id": "https://cartel.academy/#course-master",
+      "name": "FXC Master",
+      "description": "A comprehensive 20-session program of live interactive classes with recorded access — focused on practical application and intermediate trading systems.",
+      "provider": { "@id": "https://cartel.academy/#organization" },
+      "hasCourseInstance": {
+        "@type": "CourseInstance",
+        "courseMode": ["online", "onsite"],
+        "courseWorkload": "20 live sessions"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "1500",
+        "priceCurrency": "AED",
+        "url": "https://cartel.academy/#courses"
+      }
+    },
+    {
+      "@type": "Course",
+      "@id": "https://cartel.academy/#course-pro",
+      "name": "FXC Pro",
+      "description": "An advanced program for professional traders — aggressive risk management alongside advanced scalping and intraday strategies, with 1-on-1 mentor access.",
+      "provider": { "@id": "https://cartel.academy/#organization" },
+      "hasCourseInstance": {
+        "@type": "CourseInstance",
+        "courseMode": ["online", "onsite"],
+        "courseWorkload": "Advanced tier, 1-on-1 mentor access"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "4000",
+        "priceCurrency": "AED",
+        "url": "https://cartel.academy/#courses"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://cartel.academy/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "I'm a complete beginner. Is this suitable for me?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. FXC Free is designed for people who have never traded before. We start from how markets work and build up slowly, with a mentor guiding you the whole way." }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need a lot of money to start trading?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. We teach you to start small and focus on skill and risk management first. The goal is consistency, not gambling large sums. You control your own capital and pace." }
+        },
+        {
+          "@type": "Question",
+          "name": "Are classes in person or online?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Both. You can attend live at our Abu Dhabi office or join online from anywhere. Every session in FXC Master and Pro is recorded so you can review it anytime." }
+        },
+        {
+          "@type": "Question",
+          "name": "What's the difference between the three courses?",
+          "acceptedAnswer": { "@type": "Answer", "text": "FXC Free is a single intro session. FXC Master (1,500 AED) is a 20-session program covering practical, intermediate trading. FXC Pro (4,000 AED) is advanced, with scalping, intraday strategy and 1-on-1 mentoring." }
+        },
+        {
+          "@type": "Question",
+          "name": "Will I definitely make money after the course?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No honest academy can promise profit — trading carries real risk. What we promise is structured education, discipline and a risk-first method. Your results depend on your practice and discipline." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do the live classes work and can I ask questions?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Classes are interactive. You can ask questions live, and mentors review real charts with you. FXC Pro includes one-to-one sessions for personalised feedback." }
+        },
+        {
+          "@type": "Question",
+          "name": "What payment methods do you accept?",
+          "acceptedAnswer": { "@type": "Answer", "text": "We accept credit and debit cards, Apple Pay, Google Pay and local UAE payment methods through our secure Paymob gateway. On mobile you can also pay via the app." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I access the course material after I finish?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Enrolled students get lifetime access to class recordings and notes through the Dashboard, organised by course." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="wrap">
+    <a href="#home" class="brand"><img src="assets/logo.png" alt="FX Cartel" class="brand-logo" /></a>
+    <nav class="nav-links">
+      <a href="#courses" data-nav="courses">Courses</a>
+      <div class="nav-dropdown" id="navCompanyDropdown">
+        <button class="nav-dropdown-toggle" id="navCompanyToggle" data-nav="company" aria-expanded="false" aria-controls="navCompanyMenu">
+          Company <span class="nav-chevron">▾</span>
+        </button>
+        <div class="nav-dropdown-menu" id="navCompanyMenu">
+          <a href="ceo-message.html">CEO Message</a>
+          <a href="mentors.html">Our Team</a>
+          <a href="#testimonials">Testimonials</a>
+          <a href="tools.html">Tools</a>
+          <a href="#faq">FAQ</a>
+          <a href="portal.html">Dashboard</a>
+        </div>
+      </div>
+      <a href="#contact" data-nav="contact">Contact</a>
+    </nav>
+    <div class="top-cta">
+      <a href="#courses" class="btn btn-gold btn-enroll" id="enrollBtnTop">Enroll</a>
+      <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mn-close" id="mnClose" aria-label="Close">×</button>
+  <div class="mn-group" id="mnCompanyGroup">
+    <button class="mn-group-head" id="mnCompanyToggle" data-nav="company" aria-expanded="false" aria-controls="mnCompanySubmenu">
+      Company <span class="mn-chevron">▾</span>
+    </button>
+    <div class="mn-submenu" id="mnCompanySubmenu">
+      <a href="ceo-message.html">CEO Message</a>
+      <a href="mentors.html">Our Team</a>
+      <a href="#testimonials">Testimonials</a>
+      <a href="tools.html">Tools</a>
+      <a href="#faq">FAQ</a>
+      <a href="portal.html">Dashboard</a>
+    </div>
+  </div>
+  <a href="#courses" data-nav="courses">Courses</a>
+  <a href="#contact" data-nav="contact">Contact</a>
+</div>
+
+<!-- HERO -->
+<main id="home">
+<section class="hero">
+  <div class="hero-bg-photo" aria-hidden="true"></div>
+  <video id="heroVideo" class="hero-bg-video" data-src="assets/hero-video.mp4" poster="assets/hero-cartel-academy.jpg" muted playsinline loop preload="none" aria-hidden="true"></video>
+  <div class="hero-bg-scrim" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="hero-copy reveal">
+      <h1>Trade the markets with <em>clarity</em>, not noise.</h1>
+      <div class="hero-actions">
+        <a href="#courses" class="btn btn-gold">View courses</a>
+        <a href="https://wa.me/971508841001" class="btn btn-ghost" target="_blank" rel="noopener" onclick="window.FXCPixel&&FXCPixel.track('Contact')">Talk to an advisor</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRAND MARQUEE -->
+<div class="brand-marquee" aria-label="Dubai, UK, India, Abu Dhabi — 2023 Established Trading Academy">
+  <div class="marquee-track" aria-hidden="true">
+    <span class="marquee-item">Dubai • UK • India • Abu Dhabi • 2023 Established Trading Academy</span>
+    <span class="marquee-item">Dubai • UK • India • Abu Dhabi • 2023 Established Trading Academy</span>
+    <span class="marquee-item">Dubai • UK • India • Abu Dhabi • 2023 Established Trading Academy</span>
+    <span class="marquee-item">Dubai • UK • India • Abu Dhabi • 2023 Established Trading Academy</span>
+    <span class="marquee-item">Dubai • UK • India • Abu Dhabi • 2023 Established Trading Academy</span>
+    <span class="marquee-item">Dubai • UK • India • Abu Dhabi • 2023 Established Trading Academy</span>
+    <span class="marquee-item">Dubai • UK • India • Abu Dhabi • 2023 Established Trading Academy</span>
+    <span class="marquee-item">Dubai • UK • India • Abu Dhabi • 2023 Established Trading Academy</span>
+    <span class="marquee-item">Dubai • UK • India • Abu Dhabi • 2023 Established Trading Academy</span>
+    <span class="marquee-item">Dubai • UK • India • Abu Dhabi • 2023 Established Trading Academy</span>
+    <span class="marquee-item">Dubai • UK • India • Abu Dhabi • 2023 Established Trading Academy</span>
+    <span class="marquee-item">Dubai • UK • India • Abu Dhabi • 2023 Established Trading Academy</span>
+  </div>
+</div>
+
+<!-- BIG STAT NUMBERS -->
+<section class="stat-block">
+  <div class="wrap">
+    <div class="stat-grid">
+      <div class="stat-item reveal">
+        <span class="stat-num count-up" data-target="4.7" data-decimals="1" data-suffix="/5">0/5</span>
+        <span class="stat-lab">Google reviews</span>
+      </div>
+      <div class="stat-item reveal">
+        <span class="stat-num count-up" data-target="85" data-decimals="0" data-suffix="%+">0%+</span>
+        <span class="stat-lab">Success rate</span>
+      </div>
+      <div class="stat-item reveal">
+        <span class="stat-num count-up" data-target="1.2" data-decimals="1" data-suffix="k+">0k+</span>
+        <span class="stat-lab">Happy members</span>
+      </div>
+      <div class="stat-item reveal">
+        <span class="stat-num count-up" data-target="8" data-decimals="0" data-suffix="+ yrs">0+ yrs</span>
+        <span class="stat-lab">Expert mentors</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="values">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow">Why FX Cartel</span>
+      <h2>Trading education built for real life</h2>
+      <p>Whether you are building a second income, planning for retirement, or growing capital you already have — our programs meet you where you are.</p>
+    </div>
+    <div class="val-grid">
+      <div class="val reveal"><div class="ic">%</div><h3>The 1% Club</h3><p>Every strategy we teach is built around risking no more than 1% of capital per trade — the discipline that separates traders who survive from those who don't.</p></div>
+      <div class="val reveal"><div class="ic">◎</div><h3>Practical, not theoretical</h3><p>Every session applies to live charts. You learn by doing, with a mentor watching your trades.</p></div>
+      <div class="val reveal"><div class="ic">⛨</div><h3>Risk-first mindset</h3><p>We teach capital preservation before profit. Discipline and risk management are the foundation of every class.</p></div>
+      <div class="val reveal"><div class="ic">◈</div><h3>Learn in person or online</h3><p>Attend at our Abu Dhabi office or join live from anywhere. Every class is recorded for lifetime review.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 360 CAMPUS GALLERY -->
+<section class="gallery360">
+  <div class="g360-band">
+    <div class="wrap">
+      <div class="sec-head center reveal">
+        <span class="eyebrow">Take A Look Inside</span>
+        <h2>Our Abu Dhabi campus</h2>
+        <p>A real office, dedicated classrooms and mentors who show up in person — see where the learning happens.</p>
+      </div>
+    </div>
+  </div>
+  <div class="g360-stage reveal">
+    <div class="g360-track" id="g360Track">
+      <div class="g360-item"><img src="assets/gallery-classroom-wide.jpg" alt="FX Cartel classroom in session" loading="lazy" /></div>
+      <div class="g360-item"><img src="assets/gallery-mentor-teaching.jpg" alt="Mentor teaching a live class" loading="lazy" /></div>
+      <div class="g360-item"><img src="assets/gallery-lounge.jpg" alt="FX Cartel office lounge" loading="lazy" /></div>
+      <div class="g360-item"><img src="assets/gallery-classroom-empty.jpg" alt="FX Cartel classroom" loading="lazy" /></div>
+      <div class="g360-item"><img src="assets/gallery-classroom-students.jpg" alt="Students attending a session" loading="lazy" /></div>
+      <!-- Duplicate set, aria-hidden — makes the marquee loop seamlessly at
+           translateX(-50%) instead of snapping back to the start. -->
+      <div class="g360-item" aria-hidden="true"><img src="assets/gallery-classroom-wide.jpg" alt="" loading="lazy" /></div>
+      <div class="g360-item" aria-hidden="true"><img src="assets/gallery-mentor-teaching.jpg" alt="" loading="lazy" /></div>
+      <div class="g360-item" aria-hidden="true"><img src="assets/gallery-lounge.jpg" alt="" loading="lazy" /></div>
+      <div class="g360-item" aria-hidden="true"><img src="assets/gallery-classroom-empty.jpg" alt="" loading="lazy" /></div>
+      <div class="g360-item" aria-hidden="true"><img src="assets/gallery-classroom-students.jpg" alt="" loading="lazy" /></div>
+    </div>
+  </div>
+  <div class="g360-hint"><span class="hover-only">Hover an image to pause &amp; enlarge it · </span>A real look at our Abu Dhabi office</div>
+</section>
+
+<!-- COURSES -->
+<section class="courses" id="courses">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow">Our Programs</span>
+      <h2>Three paths, one disciplined method</h2>
+      <p>Start free, build your foundation, then specialise. Each tier includes structured notes, live classes and mentor access.</p>
+    </div>
+    <div class="course-grid">
+
+      <!-- FREE -->
+      <div class="course reveal">
+        <span class="tag">Start here</span>
+        <div class="cname">FXC Free</div>
+        <div class="cdesc">A single complimentary introductory session — online or in person at our Abu Dhabi office. A foundational overview for absolute beginners.</div>
+        <div class="price"><span class="free">Free</span></div>
+        <div class="pnote">One introductory session · No card required · 1 month portal access</div>
+        <ul>
+          <li>Online &amp; offline sessions at our Abu Dhabi office</li>
+          <li>Build a rock-solid foundation in stocks &amp; forex</li>
+          <li>Walk away with strategies ready for live markets</li>
+          <li>Live Q&amp;A with a mentor</li>
+        </ul>
+        <div class="c-actions">
+          <button class="btn btn-ghost btn-block" onclick="openTopics('free')">View topics</button>
+          <button class="btn btn-gold btn-block" onclick="openCheckout('free')">Book free session</button>
+        </div>
+      </div>
+
+      <!-- MASTER -->
+      <div class="course feature reveal">
+        <span class="tag">Most popular</span>
+        <div class="cname">FXC Master</div>
+        <div class="cdesc">A comprehensive 20-session program of live interactive classes with recorded access — focused on practical application and intermediate trading systems.</div>
+        <div class="price"><span class="num">1,500</span><span class="cur">AED</span></div>
+        <div class="pnote">20 live sessions · Lifetime recordings · 1 month portal access</div>
+        <ul>
+          <li>Online &amp; offline classes available</li>
+          <li>Live interactive sessions with recorded access</li>
+          <li>Scalping &amp; intraday strategies for working professionals</li>
+          <li>Live Zoom sessions + WhatsApp support</li>
+          <li>Structured notes &amp; class material</li>
+        </ul>
+        <div class="c-actions">
+          <button class="btn btn-ghost btn-block" onclick="openTopics('master')">View topics</button>
+          <button class="btn btn-gold btn-block" onclick="openCheckout('master')">Purchase course</button>
+        </div>
+      </div>
+
+      <!-- PRO -->
+      <div class="course reveal">
+        <span class="tag">Advanced</span>
+        <div class="cname">FXC Pro</div>
+        <div class="cdesc">An advanced program for professional traders — aggressive risk management alongside advanced scalping and intraday strategies.</div>
+        <div class="price"><span class="num">4,000</span><span class="cur">AED</span></div>
+        <div class="pnote">Advanced tier · 1-on-1 mentor access · 1 month portal access</div>
+        <ul>
+          <li>Advanced scalping &amp; intraday strategies for professionals</li>
+          <li>Weekly trading account review</li>
+          <li>Live interactive sessions with recorded access</li>
+          <li>Live Zoom sessions + WhatsApp support</li>
+          <li>One-to-one mentor sessions</li>
+        </ul>
+        <div class="c-actions">
+          <button class="btn btn-ghost btn-block" onclick="openTopics('pro')">View topics</button>
+          <button class="btn btn-gold btn-block" onclick="openCheckout('pro')">Purchase course</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="skills">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow">The FXC Curriculum</span>
+      <h2>What you'll master</h2>
+      <p>Every course builds these five skills — the difference between trading on hope and trading with a plan.</p>
+    </div>
+    <div class="val-grid">
+      <div class="val reveal"><div class="ic">◔</div><h3>Managing Expectations</h3><p>Learn to set achievable goals and manage expectations for long-term success.</p></div>
+      <div class="val reveal"><div class="ic">⛨</div><h3>Risk Management</h3><p>Essential techniques to safeguard your funds in forex trading.</p></div>
+      <div class="val reveal"><div class="ic">◈</div><h3>Fundamental Analysis</h3><p>Navigate market news with precision and avoid common reactive trading traps.</p></div>
+      <div class="val reveal"><div class="ic">✎</div><h3>Hands-on Practice</h3><p>Solidify your expertise with interactive exercises and practical tests after every module.</p></div>
+      <div class="val reveal"><div class="ic">◉</div><h3>Live Support</h3><p>Get the expert insights and real-time community support you need to scale faster.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- BROKERS / TOOLS -->
+<section class="partners">
+  <div class="wrap">
+    <div class="plabel">Trusted Brokers</div>
+    <div class="prow">
+      <img src="assets/broker-startrader.png" alt="StarTrader" />
+      <img src="assets/broker-ecmarkets.png" alt="EC Markets" />
+      <img src="assets/broker-equiti.png" alt="Equiti" />
+    </div>
+    <div class="plabel">Our Tools</div>
+    <div class="prow">
+      <img src="assets/tool-mt5.png" alt="MetaTrader 5" />
+      <img src="assets/tool-mt4.png" alt="MetaTrader 4" />
+    </div>
+  </div>
+</section>
+
+<!-- MENTORS (quiet portrait row) -->
+<section class="mentors-row">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow">Institutional Team</span>
+      <h2>Learn directly from the traders behind FX Cartel</h2>
+      <p>Every mentor brings real market experience — not just theory — into every live class, chart review and 1-on-1 session.</p>
+    </div>
+    <div class="mentor-row reveal">
+      <img src="assets/mentor-salgo.jpg" alt="Salgo K S — General Manager" />
+      <img src="assets/mentor-salih.jpg" alt="Salih P S — SMC &amp; CRT Analyst" />
+      <img src="assets/mentor-prajith.jpg" alt="Prajith M — XAUUSD Specialist" />
+      <img src="assets/mentor-nishad.jpg" alt="Nishad M N — Sentiment Analyst" />
+    </div>
+    <p class="mentors-more"><a href="mentors.html">Our Mentors</a></p>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi" id="testimonials">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow">Student Stories</span>
+      <h2>Real people, real progress</h2>
+      <p>From retirees to homemakers to full-time drivers — our students come from every walk of life in the UAE.</p>
+    </div>
+    <div class="testi-carousel">
+      <button class="t-arrow t-arrow-prev" id="tPrev" onclick="testiScroll(-1)" aria-label="Previous testimonials">‹</button>
+      <div class="t-grid" id="tGrid"></div>
+      <button class="t-arrow t-arrow-next" id="tNext" onclick="testiScroll(1)" aria-label="Next testimonials">›</button>
+    </div>
+    <div class="t-dots" id="tDots"></div>
+  </div>
+</section>
+
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow">Questions</span>
+      <h2>Everything a beginner asks</h2>
+      <p>New to trading? Here are the answers we give most often.</p>
+    </div>
+    <div class="faq-list" id="faqList"></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Get in touch</span>
+      <h2>Visit us or send a message</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <div class="ci-block"><div class="ci-ic">✆</div><div><h4>Give us a call</h4><p><a href="tel:+971508841001">+971 50 884 1001</a><br><a href="tel:+971561007040">+971 56 100 7040</a></p></div></div>
+        <div class="ci-block"><div class="ci-ic">✉</div><div><h4>Send us an email</h4><p><a href="mailto:info@fxcartel.ae">info@fxcartel.ae</a></p></div></div>
+        <div class="ci-block"><div class="ci-ic">⌖</div><div><h4>Visit our office</h4><p>Building No: P-50, Tower D, Room No: 902,<br>Baghdad Street, Al Danah, Abu Dhabi, UAE<br><a href="https://www.google.com/maps/search/?api=1&amp;query=Building%20No%3A%20P-50%2C%20Tower%20D%2C%20Room%20No%3A%20902%2C%20Baghdad%20Street%2C%20Al%20Danah%2C%20Abu%20Dhabi%2C%20UAE" target="_blank" rel="noopener" style="color:var(--gold-dark);font-weight:600">Get directions →</a></p></div></div>
+        <div class="ci-block"><div class="ci-ic">☖</div><div><h4>WhatsApp</h4><p><a href="https://wa.me/971508841001" target="_blank" rel="noopener">Message us directly →</a></p></div></div>
+      </div>
+      <div class="form-card reveal" style="transition-delay:.1s">
+        <h3>Get our newsletter</h3>
+        <p class="fsub">Write to us and find out more about what we can do for you.</p>
+        <form id="contactForm" onsubmit="return submitContact(event)">
+          <div class="field"><label>Name</label><input type="text" name="name" required placeholder="Your full name" /></div>
+          <div class="field"><label>Phone</label><input type="tel" name="phone" required placeholder="+971 5x xxx xxxx" /></div>
+          <div class="field"><label>Email</label><input type="email" name="email" required placeholder="you@email.com" /></div>
+          <div class="field"><label>Message</label><textarea name="message" placeholder="How can we help?"></textarea></div>
+          <div class="checkbox-row"><input type="checkbox" id="saveMe" /><label for="saveMe" style="margin:0;font-weight:400">Save my name and email for next time</label></div>
+          <button type="submit" class="btn btn-navy btn-block">Send message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#home" class="brand"><img src="assets/logo.png" alt="FX Cartel" class="brand-logo" /></a>
+        <div class="mono" style="margin-top:12px;font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold-soft)">Learn · Earn · Grow</div>
+        <p>FX Cartel Academy<br>Building No: P-50, Tower D, Room No: 902<br>Abu Dhabi, UAE · <a href="https://www.google.com/maps/search/?api=1&amp;query=Building%20No%3A%20P-50%2C%20Tower%20D%2C%20Room%20No%3A%20902%2C%20Baghdad%20Street%2C%20Al%20Danah%2C%20Abu%20Dhabi%2C%20UAE" target="_blank" rel="noopener">Get directions</a><br><br>+971 50 884 1001 · +971 56 100 7040<br>info@fxcartel.ae</p>
+      </div>
+      <div class="foot-col">
+        <h4>Our Courses</h4>
+        <a href="#courses">FXC Free</a>
+        <a href="#courses">FXC Master</a>
+        <a href="#courses">FXC Pro</a>
+      </div>
+      <div class="foot-col">
+        <h4>Useful Links</h4>
+        <a href="#contact">Contact Us</a>
+        <a href="mentors.html">Our Mentors</a>
+        <a href="tools.html">Trading Tools</a>
+        <a href="ceo-message.html">CEO Message</a>
+        <a href="portal.html">Dashboard</a>
+        <a href="privacy.html">Privacy Policy</a>
+      </div>
+      <div class="foot-col">
+        <h4>Follow</h4>
+        <div class="socials">
+          <!-- TODO: real profile URL -->
+          <a href="#" aria-label="Facebook" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M13.5 21v-7.5h2.5l.5-3h-3V8.5c0-.9.3-1.5 1.6-1.5H16.5V4.2C16.2 4.1 15.2 4 14 4c-2.4 0-4 1.5-4 4.2V10.5H7.5v3H10V21h3.5z"/></svg></a>
+          <!-- TODO: real profile URL -->
+          <a href="#" aria-label="Instagram" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></svg></a>
+          <!-- TODO: real profile URL -->
+          <a href="#" aria-label="TikTok" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M16.5 3c.4 2.1 1.8 3.6 4 3.9v2.8c-1.5 0-2.9-.5-4-1.3v6.4c0 3.4-2.7 5.7-5.8 5.7-3.1 0-5.7-2.4-5.7-5.7 0-3.2 2.7-5.7 5.9-5.6v2.9c-1.5-.2-2.9.9-2.9 2.6 0 1.5 1.2 2.7 2.8 2.7 1.6 0 2.9-1.2 2.9-2.9V3h2.8z"/></svg></a>
+          <!-- TODO: real profile URL -->
+          <a href="#" aria-label="YouTube" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><rect x="2" y="5" width="20" height="14" rx="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 8.5l6 3.5-6 3.5v-7z"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 FX Cartel. All rights reserved.</span>
+      <span>Trading involves risk. Educational content only — not financial advice.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOATING CONTACT BUBBLES -->
+<a href="tel:+971508841001" class="fab-call" aria-label="Call us" onclick="window.FXCPixel&&FXCPixel.track('Contact')">📞</a>
+<a href="https://wa.me/971508841001" class="fab-wa" target="_blank" rel="noopener" aria-label="WhatsApp" onclick="window.FXCPixel&&FXCPixel.track('Contact')">☏</a>
+
+<!-- CHECKOUT OVERLAY + PANEL -->
+<div class="overlay" id="overlay" onclick="closeCheckout()"></div>
+<aside class="checkout" id="checkout" aria-label="Checkout">
+  <div class="co-head">
+    <h3 id="coTitle">Checkout</h3>
+    <button class="co-close" onclick="closeCheckout()" aria-label="Close">×</button>
+  </div>
+  <div class="co-body" id="coBody"><!-- filled by JS --></div>
+  <div class="co-foot" id="coFoot"><!-- filled by JS --></div>
+</aside>
+
+<!-- INSTALL INSTRUCTIONS (Safari has no install prompt — shown instead of one) -->
+<div class="install-modal-backdrop" id="installModal" onclick="if(event.target===this) closeInstallModal()">
+  <div class="install-modal">
+    <h3 id="installModalTitle">Install FX Cartel</h3>
+    <p class="im-sub" id="installModalSub">Add the app to your home screen for quick access to classes and notes.</p>
+    <ol id="installModalSteps"></ol>
+    <button class="btn btn-gold btn-block" onclick="closeInstallModal()">Got it</button>
+  </div>
+</div>
+
+<!-- BACKEND CONNECTION TOAST (shown when Paymob/Supabase isn't reachable) -->
+<div class="fxc-toast" id="fxcToast" role="status" aria-live="polite"></div>
+
+<!-- PURCHASE SUCCESS (shown after a free booking is confirmed, or after
+     returning from Paymob following a paid course) -->
+<div class="success-modal-backdrop" id="successModal" onclick="if(event.target===this) closeSuccessModal()">
+  <div class="success-modal">
+    <div class="success-icon">✓</div>
+    <h3 id="successTitle">Successfully purchased</h3>
+    <p class="success-sub" id="successSub"></p>
+    <p class="success-note">We've emailed <b id="successEmail"></b> — on your first login, verify it with the 8-digit code we send and set your password.</p>
+    <a href="portal.html" class="btn btn-gold btn-block">Log in to Dashboard →</a>
+    <button class="dismiss" onclick="closeSuccessModal()">Continue browsing</button>
+  </div>
+</div>
+
+<script src="app-notify.js"></script>
+<script src="pwa-install.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

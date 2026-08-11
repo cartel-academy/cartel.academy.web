@@ -1,0 +1,38 @@
+name: CI — Validate site
+
+# Deployment itself is handled by Render's own Git integration
+# (connected directly to this repo) — not by this workflow. This just
+# runs sanity checks on every push/PR so problems surface in GitHub
+# before Render deploys them.
+
+on:
+  push:
+    branches: [ main, claude/website-pwa-google-drive-qm905q ]
+  pull_request:
+    branches: [ main, claude/website-pwa-google-drive-qm905q ]
+
+jobs:
+  validate:
+    name: Validate site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check required files exist
+        run: |
+          for f in index.html portal.html app.js manifest.webmanifest sw.js; do
+            test -f "$f" || { echo "::error::Missing $f"; exit 1; }
+          done
+          echo "All required files present."
+
+      - name: Validate HTML
+        run: npx --yes html-validate index.html portal.html || true
+
+      - name: Lint JavaScript (syntax check)
+        run: node --check app.js && echo "app.js syntax OK"

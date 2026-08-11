@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /portal.html
+Disallow: /portal
+Disallow: /trading-bg-animation.html
+Disallow: /docs/
+Disallow: /pdfjs/
+
+Sitemap: https://cartel.academy/sitemap.xml

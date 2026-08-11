@@ -1,0 +1,14 @@
+{
+  "name": "FX Cartel Academy",
+  "short_name": "FX Cartel",
+  "description": "Forex & stock trading education — Abu Dhabi. Courses, live classes and notes.",
+  "start_url": "portal.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#122A40",
+  "theme_color": "#122A40",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

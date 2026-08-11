@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: fxcartel-academy
+    env: static
+    buildCommand: "echo 'Static site — no build step'"
+    staticPublishPath: .
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Permissions-Policy
+        value: "geolocation=(), microphone=(), camera=()"
+      - path: /sw.js
+        name: Cache-Control
+        value: "no-cache, no-store, must-revalidate"
+      - path: /icons/*
+        name: Cache-Control
+        value: "public, max-age=31536000, immutable"
+      - path: /docs/*
+        name: Cache-Control
+        value: "public, max-age=86400"
+    routes:
+      - type: rewrite
+        source: /portal
+        destination: /portal.html
+      - type: rewrite
+        source: /home
+        destination: /index.html

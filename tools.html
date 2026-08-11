@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#122A40" />
+<title>Free Trading Tools — FX Cartel Academy</title>
+<meta name="description" content="Free live market ticker, Economic Calendar, Stock Screener, Stock Heatmap, and lot-size/pip calculators — no login required." />
+<link rel="canonical" href="https://cartel.academy/tools.html" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="FX Cartel Academy" />
+<meta property="og:title" content="Free Trading Tools — FX Cartel Academy" />
+<meta property="og:description" content="Free live market ticker, Economic Calendar, Stock Screener, Stock Heatmap, and lot-size/pip calculators — no login required." />
+<meta property="og:url" content="https://cartel.academy/tools.html" />
+<meta property="og:image" content="https://cartel.academy/assets/hero-cartel-academy.jpg" />
+<meta property="og:image:width" content="1672" />
+<meta property="og:image:height" content="941" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Free Trading Tools — FX Cartel Academy" />
+<meta name="twitter:description" content="Free live market ticker, Economic Calendar, Stock Screener, Stock Heatmap, and lot-size/pip calculators — no login required." />
+<meta name="twitter:image" content="https://cartel.academy/assets/hero-cartel-academy.jpg" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="FX Cartel" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<script src="meta-pixel.js"></script>
+<script src="app-notify.js"></script>
+<style>
+:root{
+  --navy:#125C53;--navy-2:#1A6D63;--gold:#FABC14;--gold-soft:#FCD673;--gold-dark:#8A6D2F;
+  --bg:#FFFFFF;--bg-2:#F4F7F6;--surface:#FFFFFF;
+  --paper:#FFFFFF;--ink:#0E2337;--muted:#4C6478;
+  --line:rgba(14,35,55,.12);--white:#fff;--shadow:0 20px 60px rgba(0,0,0,.12);--radius:14px;
+  --bg-onDark:#122A40;--ink-onDark:#EAF1EF;--muted-onDark:#8FA6A2;--line-onDark:rgba(255,255,255,.10);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+h1,h2,h3{font-family:'JetBrains Mono',monospace;font-weight:700;text-transform:uppercase;letter-spacing:.01em;line-height:1.25}
+.mono{font-family:'JetBrains Mono',monospace}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-weight:600;font-size:14px;border-radius:10px;padding:11px 18px;font-family:'Inter',sans-serif;text-decoration:none;transition:transform .15s,box-shadow .2s,background .2s}
+.btn:active{transform:translateY(1px)}
+.btn-gold{background:var(--gold);color:var(--navy)}
+.btn-block{width:100%}
+.btn-ghost{background:transparent;border:1px solid var(--line-onDark);color:var(--ink-onDark)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn-sm{padding:8px 13px;font-size:13px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dark);font-weight:500}
+
+.topbar{position:sticky;top:0;z-index:40;background:linear-gradient(120deg,#000 0%,var(--navy-2) 55%,var(--navy) 100%);border-bottom:1px solid var(--line-onDark)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--gold)}
+.brand-logo{height:25px;width:auto;display:block}
+
+.toolshub{padding:56px 0 80px}
+.sec-head{max-width:640px;margin-bottom:44px}
+.sec-head.center{margin-left:auto;margin-right:auto;text-align:center}
+.sec-head h1{font-size:clamp(24px,3.6vw,34px);color:var(--ink);margin:12px 0 12px}
+.sec-head p{color:var(--muted);font-size:16px}
+
+/* ---------- LIVE TICKER (illustrative animation only) ---------- */
+.market-card{width:100%;max-width:640px;margin:0 auto 40px;color:var(--ink);animation:marketCardFloat 5s ease-in-out infinite;will-change:transform}
+.hc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.market-card h3{font-size:16px;color:var(--ink);margin-bottom:2px;letter-spacing:-.01em}
+.market-card .sub{font-size:11.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:.03em}
+@keyframes marketCardFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.live-dot{display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#8A6D2F;background:rgba(250,188,20,.18);border:1px solid rgba(250,188,20,.4);padding:5px 10px;border-radius:20px}
+
+.ticker-tape{position:relative;overflow:hidden;padding:16px 0;background:transparent;-webkit-mask-image:linear-gradient(to right,transparent,#000 3%,#000 97%,transparent);mask-image:linear-gradient(to right,transparent,#000 3%,#000 97%,transparent)}
+.ticker{display:flex;width:max-content;animation:tapeScroll 26s linear infinite;will-change:transform}
+.ticker-tape:hover .ticker{animation-play-state:paused}
+.tick{display:flex;align-items:center;gap:10px;padding:12px 26px;border-right:1px solid var(--line);white-space:nowrap}
+.tick .pair{display:flex;align-items:center;gap:11px;font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:.02em;color:var(--ink)}
+.tick .pair i{width:24px;height:24px;flex-shrink:0;display:grid;place-items:center;border-radius:7px;background:rgba(250,188,20,.22);color:#8A6D2F;font-style:normal;font-size:12px}
+.tick .val{font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);padding:6px 12px;border-radius:8px;transition:color .3s;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.tick .val:after{content:"";width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent}
+.tick .val.up{color:#3DDB8E}
+.tick .val.down{color:#F0725F}
+.tick .val.up:after{border-bottom:6px solid #3DDB8E}
+.tick .val.down:after{border-top:6px solid #F0725F}
+@keyframes tapeScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.ticker{animation:none}}
+.blink{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 0 rgba(250,188,20,.5);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(250,188,20,.5)}70%{box-shadow:0 0 0 7px rgba(250,188,20,0)}100%{box-shadow:0 0 0 0 rgba(250,188,20,0)}}
+
+/* ---------- TRADING TOOLS ---------- */
+.tool-list{display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
+.tool-pick{display:flex;align-items:center;gap:16px;width:100%;padding:18px 20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);cursor:pointer;text-align:left;font-family:'Inter',sans-serif;transition:border-color .2s,background .2s}
+.tool-pick:hover{border-color:var(--gold-dark)}
+.tool-pick.active{background:var(--surface);border-color:var(--navy);box-shadow:var(--shadow)}
+.tool-pick-label{flex:1;min-width:0}
+.tool-pick-label h3{font-size:16px;color:var(--ink);margin-bottom:3px}
+.tool-pick-label p{font-size:12.5px;color:var(--muted)}
+.tool-pick-chevron{font-size:13px;color:var(--muted);transition:transform .25s;flex-shrink:0}
+.tool-pick.active .tool-pick-chevron{transform:rotate(180deg);color:var(--gold-dark)}
+.tool-panel{display:none;margin:-4px 0 0;padding:4px 4px 4px;border:1px solid var(--line);border-top:none;border-radius:0 0 var(--radius) var(--radius);background:var(--surface)}
+.tool-panel.open{display:block}
+.tool-panel .calc-body{padding:18px 20px 20px;max-width:420px;margin:0 auto}
+.tv-embed{min-height:400px;border-radius:10px;overflow:hidden}
+
+/* ---- animated tool icons (CSS-only "gimmick" flourishes, no gif weight) ---- */
+.tool-gimmick{position:relative;width:42px;height:42px;flex:0 0 42px;border-radius:10px;background:var(--bg);border:1px solid var(--line);overflow:hidden}
+
+.tg-cal-head{position:absolute;top:0;left:0;right:0;height:12px;background:var(--navy)}
+.tg-cal-dot{position:absolute;top:18px;left:8px;width:8px;height:8px;border-radius:50%;background:#E9576B;animation:tgPulse 1.6s infinite}
+.tg-cal-bar{position:absolute;bottom:9px;left:8px;right:8px;height:4px;border-radius:2px;background:var(--line);overflow:hidden}
+.tg-cal-bar i{position:absolute;top:0;bottom:0;background:var(--gold);border-radius:2px;animation:tgFill 2.6s ease-in-out infinite}
+@keyframes tgPulse{0%{box-shadow:0 0 0 0 rgba(233,87,107,.5)}70%{box-shadow:0 0 0 6px rgba(233,87,107,0)}100%{box-shadow:0 0 0 0 rgba(233,87,107,0)}}
+@keyframes tgFill{0%{left:0;width:15%}50%{left:40%;width:45%}100%{left:85%;width:15%}}
+
+.tg-scr{display:flex;align-items:flex-end;gap:3px;padding:9px 7px}
+.tg-scr span{flex:1;background:var(--navy-2);border-radius:2px 2px 0 0;animation:tgBar 1.8s ease-in-out infinite}
+.tg-scr span:nth-child(1){height:40%;animation-delay:0s}
+.tg-scr span:nth-child(2){height:70%;animation-delay:.15s}
+.tg-scr span:nth-child(3){height:50%;animation-delay:.3s}
+.tg-scr span:nth-child(4){height:85%;animation-delay:.45s}
+.tg-scr span:nth-child(5){height:60%;animation-delay:.6s}
+@keyframes tgBar{0%,100%{opacity:.55;transform:scaleY(.85)}50%{opacity:1;transform:scaleY(1)}}
+.tg-scr-sweep{position:absolute;top:0;bottom:0;left:2px;width:2px;background:var(--gold);box-shadow:0 0 8px var(--gold);animation:tgSweep 2.6s linear infinite}
+@keyframes tgSweep{0%{left:2px}100%{left:calc(100% - 4px)}}
+
+.tg-heat{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:3px;padding:7px}
+.tg-heat i{border-radius:2px;animation:tgHeat 3s ease-in-out infinite}
+.tg-heat i:nth-child(1){background:#1FA855;animation-delay:0s}
+.tg-heat i:nth-child(2){background:#E9576B;animation-delay:.3s}
+.tg-heat i:nth-child(3){background:#1FA855;animation-delay:.6s}
+.tg-heat i:nth-child(4){background:#FABC14;animation-delay:.9s}
+.tg-heat i:nth-child(5){background:#E9576B;animation-delay:1.2s}
+.tg-heat i:nth-child(6){background:#1FA855;animation-delay:1.5s}
+@keyframes tgHeat{0%,100%{opacity:.55;transform:scale(.9)}50%{opacity:1;transform:scale(1)}}
+
+.tg-gauge{display:flex;align-items:flex-end;justify-content:center}
+.tg-gauge-arc{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);width:30px;height:15px;border-radius:30px 30px 0 0;border:4px solid var(--line);border-bottom:none}
+.tg-gauge-needle{position:absolute;bottom:5px;left:50%;width:2px;height:15px;background:var(--gold);transform-origin:bottom center;border-radius:2px;animation:tgNeedle 2.2s ease-in-out infinite}
+@keyframes tgNeedle{0%,100%{transform:translateX(-50%) rotate(-32deg)}50%{transform:translateX(-50%) rotate(32deg)}}
+
+.tg-ruler-line{position:absolute;top:50%;left:7px;right:7px;height:2px;background:var(--line);transform:translateY(-50%)}
+.tg-ruler-line::before,.tg-ruler-line::after{content:'';position:absolute;top:-4px;width:2px;height:10px;background:var(--line)}
+.tg-ruler-line::before{left:0}
+.tg-ruler-line::after{right:0}
+.tg-ruler-tick{position:absolute;top:50%;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 6px var(--gold);transform:translate(-50%,-50%);animation:tgTick 2.4s ease-in-out infinite}
+@keyframes tgTick{0%,100%{left:16%}50%{left:84%}}
+.calc-body .field{margin-bottom:12px;text-align:left}
+.calc-body label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:5px}
+.calc-body input{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px;font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink)}
+.calc-body input:focus{outline:none;border-color:var(--gold-dark)}
+.calc-result{margin-top:14px;padding:12px 14px;background:var(--bg);border:1px solid var(--line);border-radius:10px;font-size:13.5px;color:var(--ink);min-height:20px;line-height:1.6}
+.tool-disclaimer{text-align:center;font-size:12px;color:var(--muted);margin-top:26px}
+
+footer{background:#000;color:var(--paper);padding:40px 0 26px;margin-top:0}
+footer .wrap{display:flex;flex-direction:column;gap:14px}
+footer a{color:rgba(255,255,255,.75);text-decoration:none}
+footer a:hover{color:#fff}
+.foot-bottom{font-size:13px;color:rgba(255,255,255,.55)}
+
+.fab-wa{position:fixed;bottom:22px;right:22px;z-index:50;width:56px;height:56px;border-radius:50%;background:#1FA855;color:#fff;display:grid;place-items:center;box-shadow:0 10px 30px rgba(31,168,85,.45);font-size:26px;transition:transform .2s}
+.fab-wa:hover{transform:scale(1.08)}
+
+@media(max-width:760px){
+  .market-card{margin-bottom:28px}
+  .tv-embed{min-height:320px}
+}
+@media(max-width:640px){
+  .wrap{padding:0 16px}
+  .toolshub{padding:40px 0 60px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a href="index.html" class="brand"><img src="assets/logo.png" alt="FX Cartel" class="brand-logo" /></a>
+    <a href="index.html" class="btn btn-ghost btn-sm">← Back to site</a>
+  </div>
+</header>
+
+<section class="toolshub" id="tools">
+  <div class="wrap">
+    <div class="sec-head center">
+      <span class="eyebrow">Free Resources</span>
+      <h1>Trading tools</h1>
+      <p>Live market data and quick calculators — free to use, no login required.</p>
+    </div>
+    <div class="market-card">
+      <div class="hc-top">
+        <div>
+          <h3>Live Market</h3>
+          <p class="sub">Illustrative · education only</p>
+        </div>
+        <span class="live-dot"><span class="blink"></span>LIVE</span>
+      </div>
+      <div class="ticker-tape">
+        <div class="ticker" id="ticker">
+          <div class="tick"><span class="pair"><i>€</i>EUR / USD</span><span class="val up" data-base="1.0842">1.0842</span></div>
+          <div class="tick"><span class="pair"><i>◇</i>XAU / USD</span><span class="val up" data-base="2318.40">2318.40</span></div>
+          <div class="tick"><span class="pair"><i>£</i>GBP / USD</span><span class="val down" data-base="1.2671">1.2671</span></div>
+          <div class="tick"><span class="pair"><i>¥</i>USD / JPY</span><span class="val up" data-base="156.22">156.22</span></div>
+          <div class="tick"><span class="pair"><i>₿</i>BTC / USD</span><span class="val down" data-base="64120">64120</span></div>
+          <!-- duplicated for a seamless infinite scroll loop; animateTicker() keeps both copies of each pair in sync -->
+          <div class="tick"><span class="pair"><i>€</i>EUR / USD</span><span class="val up" data-base="1.0842">1.0842</span></div>
+          <div class="tick"><span class="pair"><i>◇</i>XAU / USD</span><span class="val up" data-base="2318.40">2318.40</span></div>
+          <div class="tick"><span class="pair"><i>£</i>GBP / USD</span><span class="val down" data-base="1.2671">1.2671</span></div>
+          <div class="tick"><span class="pair"><i>¥</i>USD / JPY</span><span class="val up" data-base="156.22">156.22</span></div>
+          <div class="tick"><span class="pair"><i>₿</i>BTC / USD</span><span class="val down" data-base="64120">64120</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="tool-list" id="toolList">
+      <button class="tool-pick" data-tool="calendar" onclick="toggleTool('calendar')">
+        <div class="tool-gimmick" aria-hidden="true">
+          <div class="tg-cal-head"></div>
+          <div class="tg-cal-dot"></div>
+          <div class="tg-cal-bar"><i></i></div>
+        </div>
+        <div class="tool-pick-label">
+          <h3>Economic Calendar</h3>
+          <p>Upcoming high-impact market events, live from TradingView.</p>
+        </div>
+        <span class="tool-pick-chevron">▾</span>
+      </button>
+      <div class="tool-panel" id="panel-calendar"><div class="tv-embed" id="embed-calendar"></div></div>
+
+      <button class="tool-pick" data-tool="screener" onclick="toggleTool('screener')">
+        <div class="tool-gimmick tg-scr" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+          <div class="tg-scr-sweep"></div>
+        </div>
+        <div class="tool-pick-label">
+          <h3>Stock Screener</h3>
+          <p>Scan and filter stocks by performance, live from TradingView.</p>
+        </div>
+        <span class="tool-pick-chevron">▾</span>
+      </button>
+      <div class="tool-panel" id="panel-screener"><div class="tv-embed" id="embed-screener"></div></div>
+
+      <button class="tool-pick" data-tool="heatmap" onclick="toggleTool('heatmap')">
+        <div class="tool-gimmick tg-heat" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+        <div class="tool-pick-label">
+          <h3>Stock Heatmap</h3>
+          <p>Visualize sector performance at a glance, live from TradingView.</p>
+        </div>
+        <span class="tool-pick-chevron">▾</span>
+      </button>
+      <div class="tool-panel" id="panel-heatmap"><div class="tv-embed" id="embed-heatmap"></div></div>
+
+      <button class="tool-pick" data-tool="lotsize" onclick="toggleTool('lotsize')">
+        <div class="tool-gimmick tg-gauge" aria-hidden="true">
+          <div class="tg-gauge-arc"></div>
+          <div class="tg-gauge-needle"></div>
+        </div>
+        <div class="tool-pick-label">
+          <h3>Lot Size Calculator</h3>
+          <p>Estimate a safe position size from your account risk.</p>
+        </div>
+        <span class="tool-pick-chevron">▾</span>
+      </button>
+      <div class="tool-panel" id="panel-lotsize">
+        <div class="calc-body">
+          <div class="field"><label>Account balance (USD)</label><input type="number" id="lcBalance" value="1000" min="0" /></div>
+          <div class="field"><label>Risk per trade (%)</label><input type="number" id="lcRisk" value="1" min="0" step="0.1" /></div>
+          <div class="field"><label>Stop loss (pips)</label><input type="number" id="lcStopPips" value="20" min="1" /></div>
+          <div class="field"><label>Pip value per standard lot (USD)</label><input type="number" id="lcPipValue" value="10" min="0.01" step="0.01" /></div>
+          <button class="btn btn-gold btn-block" onclick="calcLotSize()">Calculate</button>
+          <div class="calc-result" id="lcResult">Enter your details and calculate.</div>
+        </div>
+      </div>
+
+      <button class="tool-pick" data-tool="pip" onclick="toggleTool('pip')">
+        <div class="tool-gimmick tg-ruler" aria-hidden="true">
+          <div class="tg-ruler-line"></div>
+          <div class="tg-ruler-tick"></div>
+        </div>
+        <div class="tool-pick-label">
+          <h3>Pip Calculator</h3>
+          <p>Convert pips to your account currency instantly.</p>
+        </div>
+        <span class="tool-pick-chevron">▾</span>
+      </button>
+      <div class="tool-panel" id="panel-pip">
+        <div class="calc-body">
+          <div class="field"><label>Trade size (lots)</label><input type="number" id="pcLots" value="1" min="0.01" step="0.01" /></div>
+          <div class="field"><label>Pip value per standard lot (USD)</label><input type="number" id="pcPipValue" value="10" min="0.01" step="0.01" /></div>
+          <div class="field"><label>Number of pips</label><input type="number" id="pcPips" value="20" min="0" /></div>
+          <button class="btn btn-gold btn-block" onclick="calcPipValue()">Calculate</button>
+          <div class="calc-result" id="pcResult">Enter your details and calculate.</div>
+        </div>
+      </div>
+    </div>
+    <p class="tool-disclaimer">Calculators give simplified estimates for educational purposes — always confirm exact pip/lot values with your broker before trading live.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a href="index.html" class="brand" style="color:#fff"><img src="assets/logo.png" alt="FX Cartel" class="brand-logo" /></a>
+    <div class="foot-bottom">© 2026 FX Cartel. All rights reserved. · <a href="index.html">Home</a> · <a href="mentors.html">Our Mentors</a> · <a href="portal.html">Dashboard</a></div>
+  </div>
+</footer>
+
+<a href="https://wa.me/971508841001" class="fab-wa" target="_blank" rel="noopener" aria-label="WhatsApp" onclick="window.FXCPixel&amp;&amp;FXCPixel.track('Contact')">☏</a>
+
+<script>
+/* ---------- LIVE TICKER (illustrative animation only) ----------
+   The ticker tape duplicates each pair once (for a seamless scroll loop),
+   so both copies of a given data-base must show the identical value —
+   computed once per unique pair, then mirrored onto every matching element. */
+function animateTicker(){
+  const computed = {};
+  document.querySelectorAll('#ticker .val').forEach(el=>{
+    const key = el.dataset.base;
+    if(!computed[key]){
+      const base = parseFloat(key);
+      const drift = base * (Math.random()-0.5) * 0.0006;
+      const up = drift>=0;
+      const decimals = base>1000?2:4;
+      computed[key] = {
+        text: (base+drift).toLocaleString(undefined,{minimumFractionDigits:decimals,maximumFractionDigits:decimals}),
+        cls: 'val ' + (up?'up':'down'),
+        up, pct: Math.abs(drift/base*100).toFixed(2)
+      };
+      if(window.FXCNotify){
+        const pairEl = el.closest('.tick')?.querySelector('.pair');
+        if(pairEl && computed[key].pct >= 0.02) FXCNotify.maybeShowMarketUpdate(pairEl.textContent.trim(), computed[key].pct, up);
+      }
+    }
+    el.textContent = computed[key].text;
+    el.className = computed[key].cls;
+  });
+}
+setInterval(animateTicker, 2200);
+
+/* ---------- TRADING TOOLS: LIVE DATA CONNECTORS (click-to-load) ----------
+   Economic Calendar / Stock Screener / Stock Heatmap are free TradingView
+   widgets — no API key or account needed. Only the tool names show on page
+   load; the widget script for a given tool is injected into the DOM the
+   first time its row is clicked (not upfront), so visitors who never open
+   a panel never pay the cost of loading all three. */
+const TOOL_WIDGETS = {
+  calendar: {
+    src: 'https://s3.tradingview.com/external-embed/embed-widget-events.js',
+    config: { colorTheme:'light', isTransparent:false, width:'100%', height:'400', locale:'en', importanceFilter:'-1,0,1', countryFilter:'ae,us,gb,eu' }
+  },
+  screener: {
+    src: 'https://s3.tradingview.com/external-embed/embed-widget-screener.js',
+    config: { width:'100%', height:'400', defaultColumn:'overview', defaultScreen:'general', market:'america', showToolbar:true, colorTheme:'light', locale:'en' }
+  },
+  heatmap: {
+    src: 'https://s3.tradingview.com/external-embed/embed-widget-stock-heatmap.js',
+    config: { exchanges:[], dataSource:'SPX500', grouping:'sector', blockSize:'market_cap_basic', blockColor:'change', locale:'en', symbolUrl:'', colorTheme:'light', hasTopBar:false, isDataSetEnabled:false, isZoomEnabled:true, hasSymbolTooltip:true, isMonoSize:false, width:'100%', height:'400' }
+  }
+};
+const TOOL_LOADED = {};
+
+function loadToolWidget(name){
+  const widget = TOOL_WIDGETS[name];
+  const container = document.getElementById('embed-' + name);
+  if(!widget || !container) return;
+  const outer = document.createElement('div');
+  outer.className = 'tradingview-widget-container';
+  const inner = document.createElement('div');
+  inner.className = 'tradingview-widget-container__widget';
+  outer.appendChild(inner);
+  const script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = widget.src;
+  script.async = true;
+  script.text = JSON.stringify(widget.config);
+  outer.appendChild(script);
+  container.appendChild(outer);
+}
+
+function toggleTool(name){
+  const panel = document.getElementById('panel-' + name);
+  const btn = document.querySelector(`.tool-pick[data-tool="${name}"]`);
+  if(!panel || !btn) return;
+  const wasOpen = panel.classList.contains('open');
+
+  document.querySelectorAll('.tool-panel.open').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.tool-pick.active').forEach(b => b.classList.remove('active'));
+  if(wasOpen) return; // clicking an open row just closes it
+
+  panel.classList.add('open');
+  btn.classList.add('active');
+  if(!TOOL_LOADED[name]){
+    TOOL_LOADED[name] = true;
+    loadToolWidget(name);
+  }
+}
+
+/* ---------- TRADING TOOLS: LOT SIZE / PIP CALCULATORS ----------
+   Simplified estimates for education only — a real trade's exact pip value
+   depends on the instrument and live exchange rate, which is why the
+   disclaimer next to these tells students to confirm with their broker. */
+function calcLotSize(){
+  const balance = parseFloat(document.getElementById('lcBalance').value) || 0;
+  const riskPct = parseFloat(document.getElementById('lcRisk').value) || 0;
+  const stopPips = parseFloat(document.getElementById('lcStopPips').value) || 0;
+  const pipValue = parseFloat(document.getElementById('lcPipValue').value) || 0;
+  const resultEl = document.getElementById('lcResult');
+  if(stopPips <= 0 || pipValue <= 0){ resultEl.textContent = 'Enter a valid stop loss and pip value.'; return; }
+  const riskAmount = balance * (riskPct / 100);
+  const lots = riskAmount / (stopPips * pipValue);
+  resultEl.innerHTML = `Risk amount: <b>$${riskAmount.toFixed(2)}</b><br>Recommended position size: <b>${lots.toFixed(2)} standard lots</b>`;
+}
+function calcPipValue(){
+  const lots = parseFloat(document.getElementById('pcLots').value) || 0;
+  const pipValue = parseFloat(document.getElementById('pcPipValue').value) || 0;
+  const pips = parseFloat(document.getElementById('pcPips').value) || 0;
+  const resultEl = document.getElementById('pcResult');
+  const perPip = lots * pipValue;
+  const total = perPip * pips;
+  resultEl.innerHTML = `Value per pip: <b>$${perPip.toFixed(2)}</b><br>Total for ${pips} pips: <b>$${total.toFixed(2)}</b>`;
+}
+
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Node (if you add tooling later)
+node_modules/
+npm-debug.log*
+
+# Screenshots / scratch
+shot-*.png
+*.tmp
+
+# Secrets — never commit these
+.env
+.env.*
+secrets.json

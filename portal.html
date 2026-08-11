@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#122A40" />
+<script src="meta-pixel.js"></script>
+<title>Dashboard — FX Cartel Academy</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="FX Cartel" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --navy:#125C53;--navy-2:#1A6D63;--gold:#FABC14;--gold-soft:#FCD673;--gold-dark:#8A6D2F;
+  --bg:#FFFFFF;--bg-2:#F4F7F6;--surface:#FFFFFF;
+  --paper:#FFFFFF;--ink:#0E2337;--muted:#4C6478;
+  --line:rgba(14,35,55,.12);--white:#fff;--shadow:0 20px 60px rgba(0,0,0,.45);
+  /* Sections that stay dark (topbar, course-header band, PDF viewer) can't
+     use the repointed --ink/--muted/--line/--bg above — these preserve the
+     original dark-mode values for those scoped selectors. Matches the same
+     pattern used in index.html's light-mode conversion. */
+  --bg-onDark:#122A40;--ink-onDark:#EAF1EF;--muted-onDark:#8FA6A2;--line-onDark:rgba(255,255,255,.10);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+h1,h2{font-family:'JetBrains Mono',monospace;font-weight:700;text-transform:uppercase;letter-spacing:.01em;line-height:1.22}
+h3,.serif{font-family:'Fraunces',serif;font-weight:500;letter-spacing:-.01em}
+.mono{font-family:'JetBrains Mono',monospace}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-weight:600;font-size:14px;border-radius:10px;padding:11px 18px;transition:transform .15s,box-shadow .2s,background .2s;font-family:'Inter',sans-serif}
+.btn:active{transform:translateY(1px)}
+.btn-gold{background:var(--gold);color:var(--navy)}
+.btn-navy{background:var(--navy);color:var(--paper)}
+.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+/* The topbar stays a dark background, so its .btn-ghost ("Back to site")
+   and .btn-icon (install button) need the light-on-dark treatment — every
+   other .btn-ghost (sidebar account actions) lives on the new white cards
+   and correctly uses the base rule above. */
+.topbar .btn-ghost{color:var(--ink-onDark);border-color:var(--line-onDark)}
+.btn-sm{padding:8px 13px;font-size:13px}
+.btn-block{width:100%}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.btn-icon{width:42px;height:42px;flex:0 0 42px;border-radius:10px;border:1px solid var(--line-onDark);background:transparent;color:var(--gold);display:grid;place-items:center;cursor:pointer;transition:transform .15s,background .2s,border-color .2s,color .2s}
+.btn-icon:hover{background:var(--navy);color:var(--gold);border-color:var(--navy)}
+.install-modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px);z-index:120;display:none;align-items:center;justify-content:center;padding:20px}
+.install-modal-backdrop.show{display:flex}
+.install-modal{background:var(--surface);border-radius:18px;max-width:380px;width:100%;padding:28px;box-shadow:var(--shadow)}
+.install-modal h3{font-size:20px;color:var(--ink);margin-bottom:6px}
+.install-modal .im-sub{font-size:13.5px;color:var(--muted);margin-bottom:18px}
+.install-modal ol{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.install-modal ol li{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--ink)}
+.install-modal ol li .step-num{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--navy);color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;display:grid;place-items:center}
+.install-modal ol li b{color:var(--navy)}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dark);font-weight:500}
+.phead .eyebrow{color:var(--gold)}
+.gate .eyebrow{color:var(--gold)}
+
+/* top */
+.topbar{position:sticky;top:0;z-index:40;background:linear-gradient(120deg,#000 0%,var(--navy-2) 55%,var(--navy) 100%);border-bottom:1px solid var(--line-onDark)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:10px}
+.topbar-actions{display:flex;gap:10px;align-items:center;min-width:0}
+#whoami{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;max-width:220px;vertical-align:middle}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--gold);flex-shrink:0}
+.brand-logo{height:25px;width:auto;display:block}
+.portal-tagline{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted-onDark);letter-spacing:.01em}
+/* Once a student is logged in (fresh login or a resumed session), there's
+   no "Back to site" escape on any screen size — the back-button trap
+   below already blocks the gesture, so logging out is the one
+   deliberate way to leave the portal. */
+body.portal-active #backToSiteLink{display:none}
+@media(max-width:760px){
+  .portal-tagline{display:none}
+  #whoami{max-width:100px}
+
+  /* Live Zoom Classes: the row is too tight for date + title + badge +
+     Join button side-by-side on a phone (title was wrapping to 3-4 lines
+     while squeezed into a narrow middle column). Stack it instead: date
+     top-left, Join top-right, full-width title/badge/meta below. */
+  .zoom-class{flex-wrap:wrap;align-items:center;gap:10px 14px}
+  .zoom-time{order:1;min-width:auto;text-align:left;display:flex;align-items:baseline;gap:6px}
+  .zoom-time .d{font-size:18px}
+  .zoom-class>a.btn{order:2;margin-left:auto}
+  .zoom-info{order:3;flex:1 1 100%}
+  .zoom-info h4{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:14px}
+}
+@media(max-width:420px){
+  #whoami{display:none}
+}
+
+/* header band */
+.phead{background:var(--navy) url('assets/brand-bg.jpg') center/cover no-repeat;color:var(--paper);padding:40px 0 34px}
+.phead h1{font-size:clamp(26px,4vw,38px);color:#fff;margin:10px 0 8px}
+.phead p{color:rgba(255,255,255,.7);font-size:15px}
+.progress-wrap{margin-top:22px;max-width:520px}
+.progress-bar{height:9px;background:rgba(255,255,255,.14);border-radius:6px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-soft));width:0;transition:width .5s}
+.progress-label{font-size:12.5px;color:var(--gold-soft);margin-top:8px;font-family:'JetBrains Mono',monospace}
+
+/* layout */
+.portal-grid{display:grid;grid-template-columns:280px 1fr;gap:28px;padding:34px 0 70px}
+.side{position:sticky;top:88px;align-self:start}
+.acct-card{background:linear-gradient(120deg,#000 0%,var(--navy-2) 55%,var(--navy) 100%);border:1px solid var(--line-onDark);border-radius:14px;padding:20px}
+.acct-card .aname{font-family:'Fraunces',serif;font-size:18px;color:var(--ink-onDark);margin-bottom:2px}
+.acct-card .acourse{font-size:12.5px;color:var(--muted-onDark);margin-bottom:16px}
+.acct-card .btn{width:100%;margin-bottom:8px}
+.acct-card .btn-ghost{color:var(--ink-onDark);border-color:var(--line-onDark)}
+.acct-card .btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.acct-label{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-onDark);margin:16px 0 8px}
+.acct-note{background:rgba(255,255,255,.08);border-radius:10px;padding:12px 14px;font-size:12.5px;color:var(--muted-onDark);margin-top:12px}
+.folder{background:linear-gradient(120deg,#000 0%,var(--navy-2) 55%,var(--navy) 100%);border:1px solid var(--line-onDark);border-radius:14px;margin-bottom:14px;overflow:hidden}
+.folder-head{padding:15px 18px;display:flex;align-items:center;gap:11px;font-weight:600;color:var(--ink-onDark);font-size:15px}
+.folder-head .fic{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.12);color:var(--gold);display:grid;place-items:center;font-size:15px;flex-shrink:0}
+.folder-body{border-top:1px solid var(--line-onDark)}
+.doc-row{display:flex;align-items:center;gap:11px;padding:12px 18px;cursor:pointer;border-bottom:1px solid var(--line-onDark);transition:background .15s;font-size:13.5px;color:var(--ink-onDark)}
+.doc-row:last-child{border-bottom:none}
+.doc-row:hover{background:rgba(255,255,255,.06)}
+.doc-row .pdfic{color:var(--gold-soft);font-size:15px;flex-shrink:0}
+.doc-row.done{color:var(--muted-onDark)}
+.doc-row.done .doc-name{text-decoration:line-through}
+.doc-name-wrap{display:flex;flex-direction:column;flex:1;min-width:0}
+.doc-resume{font-size:11px;color:var(--gold-soft);margin-top:2px}
+.doc-check{margin-left:auto;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line-onDark);display:grid;place-items:center;font-size:11px;flex-shrink:0}
+.doc-row.done .doc-check{background:#3DDB8E;border-color:#3DDB8E;color:#0A121B}
+
+/* main content */
+.panel{background:linear-gradient(120deg,#000 0%,var(--navy-2) 55%,var(--navy) 100%);border:1px solid var(--line-onDark);border-radius:16px;padding:26px;margin-bottom:24px}
+.panel h2{font-size:19px;color:var(--ink-onDark);margin-bottom:6px}
+.panel .psub{color:var(--muted-onDark);font-size:14px;margin-bottom:20px}
+.zoom-class{display:flex;align-items:center;gap:16px;padding:16px;border:1px solid var(--line-onDark);border-radius:12px;margin-bottom:12px;background:rgba(255,255,255,.06)}
+.zoom-time{text-align:center;min-width:66px}
+.zoom-time .d{font-family:'Fraunces',serif;font-size:22px;color:var(--gold-soft);font-weight:600;line-height:1}
+.zoom-time .m{font-size:11px;color:var(--muted-onDark);text-transform:uppercase;letter-spacing:.08em}
+.zoom-info{flex:1}
+.zoom-info h4{font-size:15px;color:var(--ink-onDark);margin-bottom:3px}
+.zoom-info .meta{font-size:12.5px;color:var(--muted-onDark)}
+.badge{display:inline-block;font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:20px;margin-left:6px;font-family:'JetBrains Mono',monospace;letter-spacing:.04em}
+.badge.one{background:rgba(250,188,20,.16);color:var(--gold)}
+.badge.grp{background:rgba(255,255,255,.14);color:var(--ink-onDark)}
+.empty{color:var(--muted-onDark);font-size:14px;padding:20px;text-align:center}
+
+/* PDF viewer modal */
+.viewer{position:fixed;inset:0;background:var(--navy);z-index:100;display:none;flex-direction:column}
+.viewer.show{display:flex}
+/* Three items in DOM order (title, close, actions), reordered visually
+   with `order` rather than justify-content:space-between: desktop keeps
+   the conventional close-at-far-right layout, while the mobile query
+   below reorders close ahead of actions so it stays pinned next to the
+   title when actions wraps to its own full-width row. */
+.viewer-bar{height:58px;background:var(--navy);display:flex;align-items:center;padding:0 18px;gap:14px;color:var(--paper);flex-shrink:0}
+.viewer-bar .vtitle{order:0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px}
+.viewer-bar .vactions{order:1;display:flex;gap:10px;align-items:center;flex-shrink:0}
+.viewer-bar .vclose{order:2;flex-shrink:0}
+@media(max-width:560px){
+  .viewer-bar{padding:0 12px;gap:10px}
+  .viewer-bar .vtitle{font-size:13px}
+}
+.viewer-frame{flex:1;background:var(--bg);overflow:hidden;position:relative}
+.viewer-frame iframe{width:100%;height:100%;border:none;position:relative;z-index:0}
+.viewer-spinner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:var(--paper);font-size:13px;z-index:2;background:var(--navy)}
+.viewer-spinner .ring{width:34px;height:34px;border-radius:50%;border:3px solid rgba(255,255,255,.25);border-top-color:var(--gold);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.vclose{background:none;border:none;color:var(--paper);font-size:26px;cursor:pointer;line-height:1}
+
+/* login gate */
+.gate{max-width:420px;margin:60px auto;background:linear-gradient(120deg,#000 0%,var(--navy-2) 55%,var(--navy) 100%);border:1px solid var(--line-onDark);border-radius:16px;padding:32px;text-align:center}
+.gate h2{font-size:22px;color:var(--ink-onDark);margin-bottom:8px}
+.gate p{color:var(--muted-onDark);font-size:14px;margin-bottom:22px}
+.field{text-align:left;margin-bottom:14px}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-onDark);margin-bottom:6px}
+.field input,.field select{width:100%;border:1px solid var(--line-onDark);border-radius:10px;padding:12px 14px;font-size:14px;background:rgba(255,255,255,.08);color:var(--ink-onDark);font-family:'Inter',sans-serif}
+.field input::placeholder{color:var(--muted-onDark)}
+.field input:focus,.field select:focus{outline:none;border-color:var(--gold-soft)}
+.gate-error{color:#F0725F;font-size:13px;margin:-6px 0 14px;text-align:left}
+.gate-link{font-size:13px;color:var(--gold-soft);font-weight:600;cursor:pointer;background:none;border:none;padding:0}
+.gate-note{font-size:12px;color:var(--muted-onDark);margin-top:16px}
+
+/* profile-completion modal */
+.modal-backdrop{position:fixed;inset:0;background:rgba(7,37,33,.6);z-index:90;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-backdrop.show{display:flex}
+
+@media(max-width:860px){
+  .portal-grid{grid-template-columns:1fr}
+  .side{position:static}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a href="index.html" class="brand"><img src="assets/logo.png" alt="FX Cartel" class="brand-logo" /></a>
+    <span class="portal-tagline">Live classes, notes &amp; recordings in your pocket.</span>
+    <div class="topbar-actions">
+      <span id="whoami" class="mono" style="font-size:12px;color:var(--muted)"></span>
+      <button class="btn-icon" id="installBtnPortal" aria-label="Download app" title="Download app">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+      </button>
+      <a href="index.html" id="backToSiteLink" class="btn btn-ghost btn-sm">← Back to site</a>
+    </div>
+  </div>
+</header>
+
+<!-- LOGIN GATE -->
+<div id="gate" class="gate" style="display:none">
+  <span class="eyebrow">Dashboard</span>
+
+  <!-- Step 1: email -->
+  <div id="gateEmail">
+    <h2>Access your course material</h2>
+    <p>Enter the email address you enrolled with.</p>
+    <div class="field"><label>Email address</label><input id="loginEmail" type="email" placeholder="you@example.com" onkeydown="if(event.key==='Enter')submitEmail()" /></div>
+    <div id="emailError" class="gate-error" style="display:none"></div>
+    <button class="btn btn-gold" style="width:100%" id="emailContinueBtn" onclick="submitEmail()">Continue</button>
+    <p class="gate-note">Not enrolled yet? <a href="index.html#courses" style="color:var(--gold-soft);font-weight:600">View courses →</a></p>
+  </div>
+
+  <!-- Step 2: password (returning student) -->
+  <div id="gatePassword" style="display:none">
+    <h2>Welcome back</h2>
+    <p id="pwWho" style="margin-bottom:8px"></p>
+    <div class="field"><label>Password</label><input id="loginPassword" type="password" placeholder="Enter your password" onkeydown="if(event.key==='Enter')submitLogin()" /></div>
+    <div id="pwError" class="gate-error" style="display:none"></div>
+    <button class="btn btn-gold" style="width:100%" id="loginBtn" onclick="submitLogin()">Log in</button>
+    <p class="gate-note">
+      <button class="gate-link" onclick="startForgotPassword()">Forgot password?</button>
+      &nbsp;·&nbsp;
+      <button class="gate-link" onclick="backToEmailStep()">Use a different email</button>
+    </p>
+  </div>
+
+  <!-- Step 3: OTP + set password (first login or reset) -->
+  <div id="gateOtp" style="display:none">
+    <h2 id="otpHeading">Verify your email</h2>
+    <p id="otpSub">We've emailed an 8-digit verification code to your registered email address.</p>
+    <div class="field" id="otpCodeField"><label>Verification code</label><input id="otpCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="8-digit code" oninput="this.value=this.value.replace(/\D/g,'').slice(0,8)" /></div>
+    <div class="field"><label>New password</label><input id="newPassword" type="password" placeholder="At least 6 characters" /></div>
+    <div class="field"><label>Confirm password</label><input id="confirmPassword" type="password" placeholder="Re-enter password" onkeydown="if(event.key==='Enter')submitSetPassword()" /></div>
+    <div id="otpError" class="gate-error" style="display:none"></div>
+    <button class="btn btn-gold" style="width:100%" id="otpSubmitBtn" onclick="submitSetPassword()">Verify &amp; set password</button>
+    <p class="gate-note">
+      <button class="gate-link" id="resendOtpBtn" onclick="resendOtp()">Resend code</button>
+      &nbsp;·&nbsp;
+      <button class="gate-link" onclick="backToEmailStep()">Use a different email</button>
+    </p>
+  </div>
+</div>
+
+<!-- PORTAL (hidden until login) -->
+<div id="portal" style="display:none">
+  <div class="phead">
+    <div class="wrap">
+      <span class="eyebrow">Dashboard</span>
+      <h1 id="courseTitle">Your course</h1>
+      <p>Your class material, recordings and live schedule — all in one place.</p>
+      <p id="validUntilLabel" class="mono" style="font-size:12.5px;color:var(--muted-onDark);margin-top:-8px;margin-bottom:14px"></p>
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
+        <div class="progress-label" id="progLabel">0% complete</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="portal-grid">
+      <!-- SIDEBAR: ACCOUNT -->
+      <div class="side">
+        <div class="acct-card">
+          <div class="aname" id="acctName">Student</div>
+          <div class="acourse" id="acctCourse">—</div>
+          <button class="btn btn-ghost btn-sm" onclick="openProfileModal()">Complete my profile</button>
+          <div class="acct-label">Settings</div>
+          <button class="btn btn-ghost btn-sm" id="notifyBtnPortal" onclick="enablePortalNotifications()">Enable notifications</button>
+          <button class="btn btn-ghost btn-sm" onclick="logout()">Log out</button>
+          <div class="acct-note">Only your enrolled course is shown here. Contact us if you'd like to add another course.</div>
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div class="main">
+        <div class="panel">
+          <h2>Course material</h2>
+          <p class="psub">Tap any document to open the full-screen viewer. Mark a topic complete once you've studied it — your progress saves automatically.</p>
+          <div id="materialList"></div>
+        </div>
+
+        <div class="panel">
+          <h2>Live Zoom classes</h2>
+          <p class="psub">Your upcoming live sessions. Join links open in Zoom.</p>
+          <div id="zoomList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PDF VIEWER -->
+<div class="viewer" id="viewer">
+  <div class="viewer-bar">
+    <div class="vtitle"><span style="color:var(--gold-soft)">▤</span> <span id="viewerTitle">Document</span></div>
+    <button class="vclose" onclick="closeViewer()" aria-label="Close">×</button>
+    <div class="vactions">
+      <button class="btn btn-gold btn-sm" id="markBtn" onclick="markCurrentDone()">Mark as learned</button>
+    </div>
+  </div>
+  <div class="viewer-frame">
+    <div class="viewer-spinner" id="viewerSpinner"><div class="ring"></div><span>Loading document…</span></div>
+    <iframe id="viewerFrame" title="PDF viewer"></iframe>
+  </div>
+</div>
+
+<!-- PROFILE COMPLETION MODAL -->
+<div class="modal-backdrop" id="profileModal">
+  <div class="gate" style="margin:0">
+    <span class="eyebrow">One more thing</span>
+    <h2>Complete your profile</h2>
+    <p>We're missing a couple of details from your enrollment.</p>
+    <div class="field"><label>Address</label><input id="profileAddress" type="text" placeholder="Street, area, city" /></div>
+    <div class="field"><label>Date of birth</label><input id="profileDob" type="date" /></div>
+    <div id="profileError" class="gate-error" style="display:none"></div>
+    <button class="btn btn-gold" style="width:100%" onclick="submitProfile()">Save</button>
+    <button class="gate-link" style="margin-top:14px" onclick="closeProfileModal()">Skip for now</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+/* ============================================================
+   BACKEND
+   Login, session and student records live in Supabase — auth
+   (email OTP + password, sessions, password reset) is handled
+   entirely by Supabase Auth, and enrollment/payment/validity checks
+   run through the check_enrollment/link_account RPCs and the
+   `students`/`bookmarks` tables (see supabase/schema.sql), gated by
+   Row Level Security so a student only ever sees their own row.
+   Only a student whose Students row has payment_status='Paid' and an
+   unexpired valid_until can get past the login gate; which single
+   course they see comes from that row's course column.
+
+   Course material is served as local PDFs bundled with the site
+   (see docs/) — no external file storage involved.
+   ============================================================ */
+
+const SUPABASE_URL = "https://dyatxhudfbvburljycky.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_BaA3skRU3e8dNN93rf_eUw_t9odHtoU";
+// Guarded rather than a bare `const sb = supabase.createClient(...)` so a
+// blocked/failed CDN load (ad-blocker, network policy, offline) surfaces a
+// specific, visible error instead of silently breaking every function below
+// with an uncaught "supabase is not defined" the student never sees.
+let sb = null;
+let SUPABASE_INIT_ERROR = null;
+try{
+  if(typeof supabase === 'undefined') throw new Error('Supabase client library failed to load from CDN — check network access to cdn.jsdelivr.net.');
+  sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+}catch(err){
+  SUPABASE_INIT_ERROR = err;
+  console.error('Supabase init failed:', err);
+}
+
+// Course material — bundled locally with the site (see docs/).
+const COURSE_MATERIAL = {
+  free:   { title:"FXC Free",   docs:[
+    {id:'f1', name:"01 · How markets work", file:"docs/fxc-free-01.pdf"},
+    {id:'f2', name:"02 · Forex vs stocks", file:"docs/fxc-free-02.pdf"},
+    {id:'f3', name:"03 · Reading a candlestick chart", file:"docs/fxc-free-03.pdf"}
+  ], zoom:[
+    {d:"18", m:"Jul", title:"Intro session — Markets 101", type:"grp", time:"7:00 PM GST", link:"https://zoom.us/j/000"}
+  ]},
+  master: { title:"FXC Master", docs:[
+    {id:'m1', name:"01 · Market structure & trends", file:"docs/fxc-master-01.pdf"},
+    {id:'m2', name:"02 · Support & resistance", file:"docs/fxc-master-02.pdf"},
+    {id:'m3', name:"03 · Candlestick patterns", file:"docs/fxc-master-03.pdf"},
+    {id:'m4', name:"04 · Building a trading system", file:"docs/fxc-master-04.pdf"},
+    {id:'m5', name:"05 · Risk & position sizing", file:"docs/fxc-master-05.pdf"}
+  ], zoom:[
+    {d:"16", m:"Jul", title:"Live: Reading market structure", type:"grp", time:"8:00 PM GST", link:"https://zoom.us/j/000"},
+    {d:"19", m:"Jul", title:"Live: Support & resistance practice", type:"grp", time:"8:00 PM GST", link:"https://zoom.us/j/000"},
+    {d:"23", m:"Jul", title:"1-on-1 chart review (optional)", type:"one", time:"By appointment", link:"https://zoom.us/j/000"}
+  ]},
+  pro:    { title:"FXC Pro", docs:[
+    {id:'p1', name:"01 · Liquidity & smart money", file:"docs/fxc-pro-01.pdf"},
+    {id:'p2', name:"02 · Scalping frameworks", file:"docs/fxc-pro-02.pdf"},
+    {id:'p3', name:"03 · Intraday execution", file:"docs/fxc-pro-03.pdf"},
+    {id:'p4', name:"04 · Advanced risk management", file:"docs/fxc-pro-04.pdf"}
+  ], zoom:[
+    {d:"17", m:"Jul", title:"1-on-1: Strategy build session", type:"one", time:"By appointment", link:"https://zoom.us/j/000"},
+    {d:"21", m:"Jul", title:"Live: Intraday execution lab", type:"grp", time:"9:00 PM GST", link:"https://zoom.us/j/000"}
+  ]}
+};
+
+let CURRENT = { email:null, userId:null, course:null, name:null, validUntil:null, done:{}, pages:{}, docs:[], viewingDocId:null };
+let PENDING_EMAIL = null;
+let OTP_MODE = 'setup'; // 'setup' | 'reset'
+// Set when the student reached step 3 by clicking the emailed magic link
+// rather than typing the 8-digit verification code from that same email — both prove
+// the same thing (control of the inbox Supabase sent to), so this skips
+// the redundant verifyOtp() call in submitSetPasswordImpl rather than
+// skipping verification itself.
+let ALREADY_VERIFIED = false;
+
+function friendlyError(code){
+  return ({
+    not_found: 'No enrollment found for this email address.',
+    payment_pending: 'Your enrollment is pending payment confirmation. Please contact support.',
+    expired: 'Your one-month course access has expired. Please contact us to renew.',
+    invalid_otp: 'That code is incorrect or has expired. Try resending it.',
+    weak_password: 'Password must be at least 6 characters.',
+    wrong_password: 'Incorrect password.'
+  })[code] || null;
+}
+
+/* ---- SYSTEM ERROR DISPLAY ----
+   Known business states (not_found, expired, wrong_password, ...) get the
+   friendly copy above. Anything else — a Supabase/Postgres error, a thrown
+   exception, the client library failing to load — prints the real
+   message/code straight from Supabase instead of a vague "something went
+   wrong", so a failure is actually diagnosable from a screenshot. */
+function showLoginError(errEl, err, knownCode){
+  const friendly = knownCode ? friendlyError(knownCode) : null;
+  if(friendly){ errEl.textContent = friendly; errEl.style.display='block'; return; }
+  const detail = (err && (err.message || err.error_description || err.msg)) || 'Unknown error';
+  const code = err && (err.code || err.status || err.name);
+  errEl.textContent = `Login system error: ${detail}${code ? ' ['+code+']' : ''}`;
+  errEl.style.display='block';
+  console.error('Portal login error:', err);
+}
+function requireSupabase(errEl){
+  if(SUPABASE_INIT_ERROR){ showLoginError(errEl, SUPABASE_INIT_ERROR); return false; }
+  return true;
+}
+
+/* ---- BUSY-STATE BUTTONS ----
+   Every submit button below awaits a network round-trip with nothing else
+   on screen to show it's working, which invites double-clicks (e.g. two
+   signInWithOtp calls firing two emails). Swap the label and disable the
+   button for the duration of the call instead. */
+function withBusy(btn, busyLabel, fn){
+  return async function(...args){
+    const original = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = busyLabel;
+    try{ return await fn(...args); }
+    finally{ btn.disabled = false; btn.textContent = original; }
+  };
+}
+
+/* ---- STEP 1: EMAIL ----
+   check_enrollment is an anon-callable RPC (see supabase/schema.sql) that
+   only ever returns booleans, never the row itself, so it can safely run
+   before any auth session exists. */
+async function submitEmailImpl(){
+  const email = document.getElementById('loginEmail').value.trim();
+  const errEl = document.getElementById('emailError');
+  errEl.style.display='none';
+  if(!email){ errEl.textContent='Please enter your email address.'; errEl.style.display='block'; return; }
+  if(!requireSupabase(errEl)) return;
+
+  let data, error;
+  try{
+    ({ data, error } = await sb.rpc('check_enrollment', { p_email: email }));
+  }catch(err){ showLoginError(errEl, err); return; }
+  if(error){ showLoginError(errEl, error); return; }
+
+  const status = data && data[0];
+  if(!status){ showLoginError(errEl, { message: 'check_enrollment returned no rows' }); return; }
+  if(!status.enrolled){ showLoginError(errEl, null, 'not_found'); return; }
+  if(!status.paid){ showLoginError(errEl, null, 'payment_pending'); return; }
+  if(!status.valid){ showLoginError(errEl, null, 'expired'); return; }
+
+  rememberEmail(email);
+  PENDING_EMAIL = email;
+  if(status.account_linked){
+    document.getElementById('pwWho').textContent = `Signed in as ${email}`;
+    document.getElementById('gateEmail').style.display='none';
+    document.getElementById('gatePassword').style.display='block';
+  }else{
+    OTP_MODE='setup';
+    document.getElementById('otpHeading').textContent='Verify your email to set a password';
+    document.getElementById('otpSub').textContent="We've emailed an 8-digit verification code to your registered email address. Enter it below and choose a password.";
+    try{
+      const { error: otpError } = await sb.auth.signInWithOtp({ email, options:{ shouldCreateUser:true } });
+      if(otpError){ showLoginError(errEl, otpError); return; }
+    }catch(err){ showLoginError(errEl, err); return; }
+    document.getElementById('gateEmail').style.display='none';
+    document.getElementById('gateOtp').style.display='block';
+    startResendCooldown();
+  }
+}
+const submitEmail = withBusy(document.getElementById('emailContinueBtn'), 'Checking…', submitEmailImpl);
+function backToEmailStep(){
+  document.getElementById('gatePassword').style.display='none';
+  document.getElementById('gateOtp').style.display='none';
+  document.getElementById('gateEmail').style.display='block';
+  document.getElementById('pwError').style.display='none';
+  document.getElementById('otpError').style.display='none';
+  // Reset in case they arrived here via tryHandleVerifiedSession — a
+  // different email typed next needs its own code, not this session's.
+  ALREADY_VERIFIED = false;
+  document.getElementById('otpCodeField').style.display='';
+}
+
+/* ---- STEP 2: PASSWORD LOGIN ---- */
+async function submitLoginImpl(){
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('pwError');
+  errEl.style.display='none';
+  if(!requireSupabase(errEl)) return;
+  try{
+    const { error } = await sb.auth.signInWithPassword({ email: PENDING_EMAIL, password });
+    if(error){
+      // Supabase's generic "Invalid login credentials" covers both a wrong
+      // password and other auth-config problems; since email/paid/valid was
+      // already confirmed in step 1, treat it as wrong password only when
+      // it's that specific message, otherwise show the real error.
+      if(/invalid login credentials/i.test(error.message||'')) showLoginError(errEl, error, 'wrong_password');
+      else showLoginError(errEl, error);
+      return;
+    }
+  }catch(err){ showLoginError(errEl, err); return; }
+  await enterPortal();
+}
+const submitLogin = withBusy(document.getElementById('loginBtn'), 'Logging in…', submitLoginImpl);
+function startForgotPassword(){
+  OTP_MODE='reset';
+  ALREADY_VERIFIED = false;
+  document.getElementById('otpCodeField').style.display='';
+  document.getElementById('otpHeading').textContent='Reset your password';
+  document.getElementById('otpSub').textContent="We've emailed an 8-digit verification code to your registered email address. Enter it below and choose a new password.";
+  document.getElementById('gatePassword').style.display='none';
+  document.getElementById('gateOtp').style.display='block';
+  const errEl = document.getElementById('pwError');
+  if(requireSupabase(errEl)){
+    sb.auth.signInWithOtp({ email: PENDING_EMAIL }).catch(err=>console.error('resend OTP failed:', err));
+    startResendCooldown();
+  }
+}
+/* Manual busy/disabled handling here instead of withBusy() — the button
+   needs to stay disabled *after* the call succeeds too (the resend
+   cooldown), which withBusy's un-conditional restore-on-finally would
+   immediately undo. */
+let resendCooldownTimer = null;
+async function resendOtp(){
+  const btn = document.getElementById('resendOtpBtn');
+  const errEl = document.getElementById('otpError');
+  errEl.style.display='none';
+  if(!requireSupabase(errEl)) return;
+  const original = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  try{
+    const { error } = await sb.auth.signInWithOtp({ email: PENDING_EMAIL });
+    if(error){ showLoginError(errEl, error); btn.disabled=false; btn.textContent=original; return; }
+  }catch(err){ showLoginError(errEl, err); btn.disabled=false; btn.textContent=original; return; }
+  startResendCooldown();
+}
+function startResendCooldown(){
+  const btn = document.getElementById('resendOtpBtn');
+  if(resendCooldownTimer) clearInterval(resendCooldownTimer);
+  let secs = 30;
+  const tick = ()=>{
+    if(secs<=0){ btn.disabled=false; btn.textContent='Resend code'; clearInterval(resendCooldownTimer); return; }
+    btn.disabled = true;
+    btn.textContent = `Code sent — resend in ${secs}s`;
+    secs--;
+  };
+  tick();
+  resendCooldownTimer = setInterval(tick, 1000);
+}
+
+/* ---- STEP 3: OTP + SET PASSWORD ----
+   Verifying the OTP (first login OR forgot-password) always yields a valid
+   Supabase Auth session; link_account() then attaches that auth user to
+   the matching Students row (only ever the row matching the verified
+   session's own email — see supabase/schema.sql), and updateUser sets the
+   password either way. */
+async function submitSetPasswordImpl(){
+  const otp = document.getElementById('otpCode').value.trim();
+  const p1 = document.getElementById('newPassword').value;
+  const p2 = document.getElementById('confirmPassword').value;
+  const errEl = document.getElementById('otpError');
+  errEl.style.display='none';
+  if(p1 !== p2){ errEl.textContent='Passwords do not match.'; errEl.style.display='block'; return; }
+  if(p1.length < 6){ errEl.textContent='Password must be at least 6 characters.'; errEl.style.display='block'; return; }
+  if(!requireSupabase(errEl)) return;
+
+  try{
+    // Skipped when ALREADY_VERIFIED (see tryHandleVerifiedSession) — a
+    // session already exists there because Supabase already verified an
+    // access token from the same email, so calling verifyOtp again would
+    // just fail on a missing/blank code with nothing left to prove.
+    if(!ALREADY_VERIFIED){
+      const { error: verifyError } = await sb.auth.verifyOtp({ email: PENDING_EMAIL, token: otp, type: 'email' });
+      if(verifyError){ showLoginError(errEl, verifyError, 'invalid_otp'); return; }
+    }
+
+    const { error: linkError } = await sb.rpc('link_account');
+    if(linkError){ showLoginError(errEl, linkError); return; }
+
+    const { error: pwError } = await sb.auth.updateUser({ password: p1 });
+    if(pwError){ showLoginError(errEl, pwError); return; }
+  }catch(err){ showLoginError(errEl, err); return; }
+
+  await enterPortal();
+}
+const submitSetPassword = withBusy(document.getElementById('otpSubmitBtn'), 'Verifying…', submitSetPasswordImpl);
+
+/* ---- SESSION ----
+   Supabase's client persists the session itself (localStorage, under its
+   own key) and restores it automatically — no custom token/session
+   plumbing needed. Only the "remembered last email" nicety below is ours. */
+async function enterPortal(){
+  let session, student, error;
+  try{
+    ({ data: { session } } = await sb.auth.getSession());
+    if(!session) return;
+    ({ data: student, error } = await sb.from('students').select('*').maybeSingle());
+  }catch(err){ console.error('enterPortal failed:', err); alert(`Could not load your enrollment: ${err.message||err}`); return; }
+  if(error || !student){ console.error('enterPortal: students lookup failed:', error); alert(`Could not load your enrollment: ${(error&&error.message)||'no matching row'}`); return; }
+  CURRENT.email = session.user.email;
+  CURRENT.userId = session.user.id;
+  CURRENT.course = student.course;
+  CURRENT.name = student.name || '';
+  CURRENT.validUntil = student.valid_until;
+  document.getElementById('gate').style.display='none';
+  document.getElementById('portal').style.display='block';
+  document.body.classList.add('portal-active');
+  document.getElementById('whoami').textContent = CURRENT.email;
+  await loadPortalData();
+  renderPortal();
+  armBackButtonTrap();
+  if(!student.address || !student.dob) openProfileModal();
+  notifyIncompleteCourseIfNeeded();
+}
+
+/* ---- REMEMBERED EMAIL ADDRESS ----
+   Deliberately separate from the Supabase session and NOT cleared on
+   logout, so a returning student only has to type their password next
+   time, not their email again. Only the email address is stored here —
+   never a password or session token. */
+const LAST_EMAIL_KEY = 'fxc_last_email';
+function rememberEmail(email){ try{ localStorage.setItem(LAST_EMAIL_KEY, email); }catch(e){} }
+
+/* ---- MAGIC-LINK RETURN ----
+   supabase-js auto-detects an access_token in the URL hash on page load
+   (detectSessionInUrl, on by default) and turns it into a real session —
+   this happens whether the student clicked the "Magic Link" template's
+   link or arrived some other way a session already exists. Either way,
+   an existing session for an enrolled-but-not-yet-linked student means
+   Supabase already verified their email; send them straight to "set a
+   password" instead of also asking for the 8-digit verification code from the same
+   email. Runs before tryPrefillLastEmail() in init() and returns true if
+   it handled the screen, so that function is skipped. */
+async function tryHandleVerifiedSession(){
+  if(SUPABASE_INIT_ERROR) return false;
+  let session;
+  try{ ({ data: { session } } = await sb.auth.getSession()); }catch(err){ return false; }
+  if(!session || !session.user || !session.user.email) return false;
+  const email = session.user.email;
+  let data, error;
+  try{ ({ data, error } = await sb.rpc('check_enrollment', { p_email: email })); }
+  catch(err){ return false; }
+  const status = !error && data && data[0];
+  // Only take over for the exact case this exists for: enrolled, paid,
+  // valid, and not yet linked to an auth account. Anything else (already
+  // linked, not enrolled, etc.) falls through to the normal email step.
+  if(!status || !status.enrolled || !status.paid || !status.valid || status.account_linked) return false;
+
+  rememberEmail(email);
+  PENDING_EMAIL = email;
+  OTP_MODE = 'setup';
+  ALREADY_VERIFIED = true;
+  document.getElementById('otpHeading').textContent = 'Set your password';
+  document.getElementById('otpSub').textContent = `Your email (${email}) is already verified — choose a password to finish setting up your account.`;
+  document.getElementById('otpCodeField').style.display = 'none';
+  document.getElementById('gateEmail').style.display = 'none';
+  document.getElementById('gateOtp').style.display = 'block';
+  return true;
+}
+
+async function tryPrefillLastEmail(){
+  const errEl = document.getElementById('emailError');
+  // Reading the remembered email and filling the input is pure localStorage
+  // + DOM, no Supabase involved — do it before the init-error check below so
+  // a flaky CDN/network doesn't cost the student a convenience it never
+  // actually depended on. Only the enrollment lookup and auto-advance to
+  // the password step (which do need Supabase) are gated on it.
+  let email;
+  try{ email = localStorage.getItem(LAST_EMAIL_KEY); }catch(e){ email = null; }
+  if(email) document.getElementById('loginEmail').value = email;
+  if(SUPABASE_INIT_ERROR){ showLoginError(errEl, SUPABASE_INIT_ERROR); return; }
+  if(!email) return;
+  try{
+    const { data, error } = await sb.rpc('check_enrollment', { p_email: email });
+    const status = !error && data && data[0];
+    if(!status || !status.enrolled || !status.paid || !status.valid || !status.account_linked) return; // stay on the normal (prefilled) email step
+    PENDING_EMAIL = email;
+    document.getElementById('pwWho').textContent = `Signed in as ${email}`;
+    document.getElementById('gateEmail').style.display='none';
+    document.getElementById('gatePassword').style.display='block';
+  }catch(err){ console.error('tryPrefillLastEmail failed:', err); } // non-fatal — stay on the prefilled email step
+}
+
+async function tryResumeSession(){
+  if(SUPABASE_INIT_ERROR) return false;
+  let session, student, error;
+  try{
+    ({ data: { session } } = await sb.auth.getSession());
+    if(!session) return false;
+    ({ data: student, error } = await sb.from('students').select('*').maybeSingle());
+  }catch(err){ console.error('tryResumeSession failed:', err); return false; }
+  if(error || !student) return false;
+  if(!student.valid_until || new Date(student.valid_until).getTime() <= Date.now()) return false; // expired since last visit
+  CURRENT.email = session.user.email;
+  CURRENT.userId = session.user.id;
+  CURRENT.course = student.course;
+  CURRENT.name = student.name || '';
+  CURRENT.validUntil = student.valid_until;
+  document.getElementById('gate').style.display='none';
+  document.getElementById('portal').style.display='block';
+  document.body.classList.add('portal-active');
+  document.getElementById('whoami').textContent = CURRENT.email;
+  await loadPortalData();
+  renderPortal();
+  armBackButtonTrap();
+  notifyIncompleteCourseIfNeeded();
+  return true;
+}
+
+async function logout(){
+  try{ if(sb) await sb.auth.signOut(); }catch(err){ console.error('signOut failed:', err); }
+  location.href = 'portal.html';
+}
+
+/* ---- NOTIFICATIONS (Settings) ---- */
+function refreshNotifyButton(){
+  const btn = document.getElementById('notifyBtnPortal');
+  if(!btn) return;
+  if('Notification' in window && Notification.permission === 'granted'){
+    btn.textContent = '✓ Notifications enabled';
+    btn.disabled = true;
+  }else{
+    btn.textContent = 'Enable notifications';
+    btn.disabled = false;
+  }
+}
+async function enablePortalNotifications(){
+  if(!window.FXCNotify) return;
+  const perm = await FXCNotify.requestPermission();
+  if(perm === 'denied') alert('Notifications are blocked. Enable them from your browser settings to get updates.');
+  refreshNotifyButton();
+}
+
+/* ---- BACK-BUTTON TRAP ----
+   Only the explicit "Back to site" link may leave the authenticated portal view;
+   the browser Back/Forward gesture is trapped here and re-lands on the portal. */
+function armBackButtonTrap(){
+  history.pushState({fxcPortal:true}, '', location.href);
+  window.addEventListener('popstate', ()=>{
+    history.pushState({fxcPortal:true}, '', location.href);
+  });
+}
+
+/* ---- COURSE MATERIAL (local PDFs bundled with the site) ---- */
+async function loadPortalData(){
+  CURRENT.docs = COURSE_MATERIAL[CURRENT.course] ? COURSE_MATERIAL[CURRENT.course].docs : [];
+
+  try{
+    const { data, error } = await sb.from('bookmarks').select('topic_id, marked_learned, last_page').eq('course', CURRENT.course);
+    const done = {}, pages = {};
+    if(!error && data) data.forEach(row => {
+      if(row.marked_learned) done[row.topic_id] = true;
+      if(row.last_page) pages[row.topic_id] = row.last_page;
+    });
+    CURRENT.done = done;
+    CURRENT.pages = pages;
+  }catch(e){ CURRENT.done = {}; CURRENT.pages = {}; }
+}
+
+/* ---- RENDER ---- */
+function renderPortal(){
+  const meta = COURSE_MATERIAL[CURRENT.course] || {title:CURRENT.course, zoom:[]};
+  document.getElementById('courseTitle').textContent = meta.title || CURRENT.course;
+  document.getElementById('acctName').textContent = CURRENT.name || 'Student';
+  document.getElementById('acctCourse').textContent = meta.title || CURRENT.course;
+  const validLabel = document.getElementById('validUntilLabel');
+  if(validLabel){
+    const d = CURRENT.validUntil ? new Date(CURRENT.validUntil) : null;
+    validLabel.textContent = (d && !isNaN(d.getTime()))
+      ? `Access valid until ${d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}`
+      : '';
+  }
+  refreshNotifyButton();
+
+  document.getElementById('materialList').innerHTML = CURRENT.docs.map(d=>`
+    <div class="doc-row ${CURRENT.done[d.id]?'done':''}" style="border:1px solid var(--line-onDark);border-radius:10px;margin-bottom:9px" onclick="openDoc('${d.id}')">
+      <span class="pdfic">▤</span>
+      <span class="doc-name-wrap">
+        <span class="doc-name">${d.name}</span>
+        ${CURRENT.pages[d.id] ? `<span class="doc-resume">Resume at page ${CURRENT.pages[d.id]}</span>` : ''}
+      </span>
+      <span class="doc-check">${CURRENT.done[d.id]?'✓':''}</span>
+    </div>`).join('') || '<div class="empty">Course material is being prepared — check back soon.</div>';
+
+  const zoom = meta.zoom || [];
+  document.getElementById('zoomList').innerHTML = zoom.length ? zoom.map(z=>`
+    <div class="zoom-class">
+      <div class="zoom-time"><div class="d">${z.d}</div><div class="m">${z.m}</div></div>
+      <div class="zoom-info">
+        <h4>${z.title}<span class="badge ${z.type==='one'?'one':'grp'}">${z.type==='one'?'1-on-1 mentor':'Group class'}</span></h4>
+        <div class="meta">${z.time}</div>
+      </div>
+      <a href="${z.link}" target="_blank" rel="noopener" class="btn btn-navy btn-sm">Join</a>
+    </div>`).join('') : '<div class="empty">No classes scheduled right now. Check back soon.</div>';
+
+  updateProgress();
+}
+
+function updateProgress(){
+  const docs = CURRENT.docs;
+  const done = docs.filter(d=>CURRENT.done[d.id]).length;
+  const pct = docs.length? Math.round(done/docs.length*100):0;
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progLabel').textContent = `${pct}% complete · ${done}/${docs.length} topics`;
+}
+
+/* ---- PROGRESS (mirrors to the bookmarks table) ---- */
+async function saveProgress(topicId, learned){
+  try{
+    await sb.from('bookmarks').upsert({
+      user_id: CURRENT.userId, course: CURRENT.course, topic_id: topicId,
+      marked_learned: learned, updated_on: new Date().toISOString()
+    }, { onConflict: 'user_id,course,topic_id' });
+  }catch(e){}
+}
+
+/* ---- PDF VIEWER ----
+   Self-hosted pdf.js (pdfjs/web/viewer.html — vendored from Mozilla's
+   official "generic" build) instead of the browser's native PDF
+   renderer. Same-origin iframe, so once it's loaded we can reach into
+   frame.contentWindow.PDFViewerApplication directly (no postMessage
+   needed) and listen for its real "pagechanging" event — that's what
+   makes automatic resume-where-you-left-off possible; the native
+   viewer never exposed that. */
+let pageSaveTimer = null;
+function openDoc(docId){
+  const doc = CURRENT.docs.find(d=>d.id===docId);
+  if(!doc) return;
+  CURRENT.viewingDocId = docId;
+  document.getElementById('viewerTitle').textContent = doc.name;
+  document.getElementById('markBtn').textContent = CURRENT.done[docId] ? '✓ Learned' : 'Mark as learned';
+
+  // Open the viewer + spinner immediately on click; the iframe's own load
+  // event (below) hides the spinner once pdf.js actually finishes rendering.
+  document.getElementById('viewer').classList.add('show');
+  document.body.style.overflow='hidden';
+  document.getElementById('viewerSpinner').style.display='flex';
+  const frame = document.getElementById('viewerFrame');
+  const savedPage = CURRENT.pages[docId];
+  const fileUrl = new URL(doc.file, location.href).href;
+  frame.src = `pdfjs/web/viewer.html?file=${encodeURIComponent(fileUrl)}` + (savedPage ? `#page=${savedPage}` : '');
+  frame.onload = async () => {
+    document.getElementById('viewerSpinner').style.display='none';
+    try{
+      const app = frame.contentWindow.PDFViewerApplication;
+      if(!app) return;
+      if(app.initializedPromise) await app.initializedPromise;
+      app.eventBus.on('pagechanging', evt => {
+        if(CURRENT.viewingDocId !== docId) return; // stale listener from a closed/reopened viewer
+        CURRENT.pages[docId] = evt.pageNumber;
+        clearTimeout(pageSaveTimer);
+        pageSaveTimer = setTimeout(() => persistPage(docId, evt.pageNumber), 1200);
+      });
+    }catch(e){ console.error('pdf.js pagechanging hook failed:', e); }
+  };
+}
+async function persistPage(docId, page){
+  try{
+    await sb.from('bookmarks').upsert({
+      user_id: CURRENT.userId, course: CURRENT.course, topic_id: docId,
+      marked_learned: !!CURRENT.done[docId], last_page: page, updated_on: new Date().toISOString()
+    }, { onConflict: 'user_id,course,topic_id' });
+  }catch(e){}
+}
+function closeViewer(){
+  clearTimeout(pageSaveTimer);
+  const id = CURRENT.viewingDocId;
+  if(id && CURRENT.pages[id]) persistPage(id, CURRENT.pages[id]); // flush any pending save immediately
+  document.getElementById('viewer').classList.remove('show');
+  document.getElementById('viewerFrame').src='';
+  document.body.style.overflow='';
+  renderPortal(); // refresh "Resume at page N" hints on the doc list
+}
+function markCurrentDone(){
+  const id = CURRENT.viewingDocId;
+  if(!id) return;
+  CURRENT.done[id] = !CURRENT.done[id];
+  document.getElementById('markBtn').textContent = CURRENT.done[id] ? '✓ Learned' : 'Mark as learned';
+  saveProgress(id, CURRENT.done[id]);
+  renderPortal();
+}
+
+/* ---- PROFILE COMPLETION ---- */
+function openProfileModal(){ document.getElementById('profileModal').classList.add('show'); }
+function closeProfileModal(){ document.getElementById('profileModal').classList.remove('show'); }
+async function submitProfile(){
+  const address = document.getElementById('profileAddress').value.trim();
+  const dob = document.getElementById('profileDob').value;
+  const errEl = document.getElementById('profileError');
+  errEl.style.display='none';
+  if(!requireSupabase(errEl)) return;
+  try{
+    const { error } = await sb.from('students')
+      .update({ address, dob: dob || null, profile_complete: true })
+      .eq('user_id', CURRENT.userId);
+    if(error){ showLoginError(errEl, error); return; }
+  }catch(err){ showLoginError(errEl, err); return; }
+  closeProfileModal();
+}
+
+/* ---- NOTIFICATIONS (foreground-only — see notifications.js) ---- */
+function notifyIncompleteCourseIfNeeded(){
+  if(window.FXCNotify) window.FXCNotify.incompleteCourse(CURRENT.docs, CURRENT.done);
+}
+
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeViewer(); });
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
+
+(async function init(){
+  let resumed = false;
+  try{ resumed = await tryResumeSession(); }catch(err){ console.error('init: tryResumeSession threw:', err); }
+  if(!resumed){
+    document.getElementById('gate').style.display='block';
+    document.getElementById('portal').style.display='none';
+    let verified = false;
+    try{ verified = await tryHandleVerifiedSession(); }catch(err){ console.error('init: tryHandleVerifiedSession threw:', err); }
+    if(!verified){
+      try{ await tryPrefillLastEmail(); }catch(err){ console.error('init: tryPrefillLastEmail threw:', err); }
+    }
+  }
+})();
+</script>
+
+<!-- INSTALL INSTRUCTIONS (Safari has no install prompt — shown instead of one) -->
+<div class="install-modal-backdrop" id="installModal" onclick="if(event.target===this) closeInstallModal()">
+  <div class="install-modal">
+    <h3 id="installModalTitle">Install FX Cartel</h3>
+    <p class="im-sub" id="installModalSub">Add the app to your home screen for quick access to classes and notes.</p>
+    <ol id="installModalSteps"></ol>
+    <button class="btn btn-gold btn-block" onclick="closeInstallModal()">Got it</button>
+  </div>
+</div>
+
+<script src="app-notify.js"></script>
+<script src="pwa-install.js"></script>
+</body>
+</html>

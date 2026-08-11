@@ -1,0 +1,56 @@
+# FX Cartel Academy — Website (v5)
+
+Premium, minimal single-page site for a forex & stock trading academy (Abu Dhabi). Installable as a PWA, mobile-responsive, with slide-in checkout, Paymob payment, a real payment-gated student portal (Supabase Auth: email OTP + password login, single-course access), foreground push notifications, and progress bookmarks. Backend is **Supabase** (Postgres + Auth + Edge Functions), hosted on **Render**.
+
+## Files
+| File | Purpose |
+|---|---|
+| `index.html` | Main one-page site (hero, courses, gallery, testimonials, FAQ, contact) |
+| `app.js` | Checkout, topics, PWA install, notifications, Supabase checkout/contact calls |
+| `app-notify.js` | Shared foreground notification helper (`window.FXCNotify`), used by `index.html`, `portal.html`, and `tools.html` |
+| `meta-pixel.js` | Meta Pixel bootstrap + cookie-consent banner, loaded by `index.html`, `mentors.html`, `portal.html`, `privacy.html`, `ceo-message.html`, `tools.html`. Only loads `fbq`/the pixel after the visitor accepts the banner (`localStorage` key `fxc_cookie_consent`) |
+| `privacy.html` | Privacy policy page (Meta Pixel/advertising disclosure, data retention, contact) — **needs review by a real lawyer before relying on it**, see the callout on the page itself |
+| `ceo-message.html` | Standalone "A Message From Our CEO" page (moved off the homepage), linked from the main nav's Company dropdown and footer |
+| `tools.html` | Standalone "Trading tools" page (moved off the homepage) — live illustrative market ticker, click-to-load TradingView Economic Calendar/Screener/Heatmap, and lot-size/pip calculators. Self-contained: its JS (ticker animation, widget loading, calculators) lives inline on the page rather than in `app.js`, since it's the only page that needs it |
+| `portal.html` | Student portal: Supabase Auth login (email OTP + password), PDF viewer, Zoom classes, progress marking |
+| `pdfjs/` | Self-hosted Mozilla pdf.js (v5.4.149, vendored — MIT license, see `pdfjs/LICENSE`), used as the course-material viewer instead of the browser's native PDF renderer. Same-origin, so `portal.html` can hook its `pagechanging` event for automatic "resume where you left off" bookmarking (`bookmarks.last_page`) — the native viewer had no way to report the current page back to the app. Trimmed from Mozilla's official "generic" build: no source maps, English locale only, demo PDF/debugger panel removed. |
+| `manifest.webmanifest`, `sw.js`, `icons/`, `assets/` | PWA install + offline + branding |
+| `docs/` | Course PDFs (topics + explanation + chart) — served directly by the static host, no external file storage |
+| `supabase/schema.sql` | Postgres schema: `students`, `leads`, `bookmarks` tables, RLS policies, `check_enrollment`/`link_account` RPCs |
+| `supabase/functions/` | Edge Functions: `checkout`, `contact`, `create-payment` (Paymob Intention API), `paymob-webhook` |
+
+## Go-live checklist
+1. **Host the folder** — this is a static site, deployed via Render (see `DEPLOYMENT.md`), though Netlify, Vercel, or your own domain would work too. HTTPS is required for PWA + Paymob.
+2. **Supabase project:** create a project at [supabase.com](https://supabase.com), then apply `supabase/schema.sql` (SQL Editor, or the Supabase CLI/MCP) to create the `students`/`leads`/`bookmarks` tables, RLS policies, and RPCs. If you're applying this to an **already-deployed** database rather than a fresh one, also run the commented `alter table ... add column if not exists ...` lines near the top of that file for `bookmarks.last_page` (PDF viewer resume-position) and `students.is_superuser` (see below).
+3. **Deploy the Edge Functions:** `checkout`, `contact`, `create-payment`, `paymob-webhook` in `supabase/functions/` — deploy each via the Supabase CLI (`supabase functions deploy <name>`) or the dashboard. `send-test-email` is optional — a one-off Resend API sanity check, not part of the site's normal flow (see below); delete it once you've confirmed Resend works.
+4. **Edge Function secrets** (Dashboard → Edge Functions → Secrets, never committed to git): `SUPABASE_SERVICE_ROLE_KEY` (from Project Settings → API), `PAYMOB_SECRET_KEY`, `PAYMOB_PUBLIC_KEY`, `PAYMOB_INTEGRATION_IDS` (comma-separated numeric IDs from your Paymob dashboard), `PAYMOB_HMAC_SECRET`, optional `PAYMOB_BASE_URL` override, optional `RESEND_API_KEY` (only needed for the `send-test-email` function — the portal's actual login-code emails go through Supabase Auth's own SMTP settings, not this key).
+5. **Wire the frontend:** `SUPABASE_URL` and `SUPABASE_ANON_KEY` (the public/publishable key — safe to hardcode client-side, protected by RLS) are already set in `app.js` and `portal.html`; update them if you point this at a different Supabase project.
+6. **Paymob:** add your API keys, Integration ID(s) and HMAC secret as Edge Function secrets (step 4). Set your Paymob integration's "Transaction processed callback" URL to the deployed `paymob-webhook` function URL — this is what marks an order/student as **Paid**, which gates portal login. **This webhook cannot be tested without live Paymob credentials — do a real sandbox transaction and confirm a student's row flips to `Paid` before going live.**
+7. **Email OTP:** handled automatically by Supabase Auth — no extra setup for basic volume, though a custom SMTP provider (Dashboard → Authentication → SMTP Settings) is recommended in production for deliverability and to remove Supabase's test-sender rate limits.
+8. **Meta Pixel (optional, for Meta Ads reporting):** set `META_PIXEL_ID` at the top of `meta-pixel.js` (this is the public pixel ID — safe to hardcode client-side, same convention as `SUPABASE_URL`). For accurate `Purchase` reporting, also set the Edge Function secrets `META_PIXEL_ID` and `META_CAPI_ACCESS_TOKEN` (Dashboard → Edge Functions → Secrets — a System User access token generated in Meta Events Manager → your pixel → Settings → Conversions API), and optionally `META_TEST_EVENT_CODE` while validating events in Meta's Test Events tool. Without these two secrets set, `paymob-webhook` silently skips the Meta CAPI call — everything else on the site keeps working.
+
+## Student portal access model
+- The portal identifies a student by **email address** — a student only reaches the portal if their email's `students` row has `payment_status = 'Paid'` (auto-set for the free course; set via the Paymob webhook for paid courses — see step 6 above) **and** is still within its `valid_until` date. Mobile number remains a unique field collected at checkout, but the portal login/session/bookmarks all key off email, not phone.
+- Every course currently grants **one month** of portal access from the moment payment is confirmed — instantly for the free course, on Paymob webhook confirmation for paid ones. `valid_until` is stored on the same row and re-checked on every login/session-resume; an expired student sees a clear "access has expired" message instead of the portal.
+- Checking out again on the same phone/email only succeeds if that row's course has **expired**, or the student picks a **different course** (an upgrade/downgrade) — either case renews the same row (new order, course, amount and validity window) rather than creating a duplicate, and keeps the student's existing login so it doesn't change. Buying the same still-valid course again is rejected as a genuine duplicate.
+- First login: enter email → email OTP → set a password. Returning visits: email + password, with a "Forgot password?" flow that re-runs the OTP step. Authentication, sessions, and password storage are handled entirely by Supabase Auth — no custom crypto in this codebase.
+- A student only ever sees the single course recorded against their email address — there's no tier switcher.
+- The portal remembers the last email address used on a device (`localStorage`, separate from the session itself, kept even after logout) so a returning student only has to type their password next time. The active session is managed by the Supabase client SDK.
+- Once installed as a PWA, the app opens straight to the Student Portal (`start_url` is `portal.html`) rather than the marketing homepage.
+
+## Superuser flag
+`students.is_superuser` exists for future admin-level features but has no UI, RPC, or Edge Function reading or writing it yet. It's locked down at the database level, not just by app code: the column is deliberately left out of the `grant update (...)` column list in `schema.sql`, so Postgres itself refuses any update to it from the `authenticated` role regardless of what a client sends — RLS alone wouldn't stop a crafted direct REST call, but a missing column-level grant does. The only way to set it is a manual `update` run directly in the Supabase SQL editor (see the commented example in `schema.sql`), which is how `cbsharan@gmail.com` was made the sole superuser.
+
+## Meta Pixel / Ads reporting
+- `meta-pixel.js` shows a cookie-consent banner (Accept/Reject) on first visit; the pixel (`fbq`) only loads after Accept, per `localStorage['fxc_cookie_consent']`. Rejecting (or ignoring) the banner means no pixel events fire for that visitor.
+- Client-side events fired from `app.js`/`index.html`/`mentors.html`: `PageView` (automatic), `ViewContent` (opening a course's topics), `InitiateCheckout` (opening the checkout panel), `CompleteRegistration` (free-course signup completes), `Lead` (contact form submitted), `Contact` (call/WhatsApp buttons and "Talk to an advisor" clicked).
+- **`Purchase` is deliberately never fired client-side.** A paid course's checkout redirect is not proof of payment — only the `paymob-webhook` Edge Function (HMAC-verified, see below) knows a payment actually cleared, so it's the sole place that reports `Purchase`, via the Meta Conversions API (server-side), with the customer's email/phone SHA-256 hashed before being sent (Meta's Advanced Matching requirement — no raw PII is ever transmitted). This avoids the common inaccuracy of counting checkout *attempts* as purchases.
+- `privacy.html` documents this behavior for visitors and is linked from every page's footer.
+
+## Notifications
+Daily re-engagement, illustrative market-move alerts, and "incomplete course" reminders are all **foreground-only**: they use the Notification API + service worker `showNotification()`, triggered while the site/app is open, gated to at most once per calendar day each. There is no Web Push/VAPID backend, so nothing fires while the app is fully closed. Permission is requested when a student clicks "download the app," or from the "Enable notifications" button in the Student Portal's Settings area — there's no standalone bell icon anymore.
+
+## Notes
+- Payments, checkout, and login calls fail *gracefully* in demo mode — the site never dead-ends if an Edge Function or Paymob is unreachable, though login/checkout obviously need the Supabase project and Edge Functions actually deployed to do anything real.
+- The market ticker is illustrative animation only (clearly labelled), to keep the site compliant — no live financial data or profit claims. Market-move notifications follow the same illustrative-only rule.
+- The Economic Calendar, Stock Screener, and Stock Heatmap in the Tools section are free, live TradingView embed widgets — no API key or account needed.
