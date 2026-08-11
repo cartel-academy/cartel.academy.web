@@ -33,7 +33,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
 :root{
-  --navy:#125C53;--navy-2:#1A6D63;--gold:#FABC14;--gold-soft:#FCD673;--gold-dark:#8A6D2F;
+  --navy:#125C53;--navy-2:#1A6D63;--gold:#FABC14;--gold-soft:#FCD673;--gold-dark:#8A6D2F;--gold-2:#8E8C2E;
   --bg:#FFFFFF;--bg-2:#F4F7F6;--surface:#FFFFFF;
   --paper:#FFFFFF;--ink:#0E2337;--muted:#4C6478;
   --line:rgba(14,35,55,.12);--white:#fff;--shadow:0 20px 60px rgba(0,0,0,.45);
@@ -49,7 +49,7 @@ img{max-width:100%;display:block}
 .wrap{max-width:1180px;margin:0 auto;padding:0 22px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-weight:600;font-size:14px;border-radius:10px;padding:11px 18px;transition:transform .15s,box-shadow .2s,background .2s;font-family:'Inter',sans-serif}
 .btn:active{transform:translateY(1px)}
-.btn-gold{background:var(--gold);color:var(--navy)}
+.btn-gold{background:linear-gradient(90deg,var(--gold) 0%,var(--gold-2) 100%);color:var(--navy)}
 .btn-gold:hover{box-shadow:0 8px 22px rgba(198,161,91,.4)}
 .btn-navy{background:var(--navy);color:var(--paper)}
 .btn-navy:hover{background:var(--navy-2)}
