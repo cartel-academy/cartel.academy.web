@@ -20,7 +20,7 @@
     try{
       if('serviceWorker' in navigator){
         const reg = await navigator.serviceWorker.ready;
-        reg.showNotification(title, { body, tag, icon:'icons/icon-192.png', badge:'icons/icon-192.png' });
+        reg.showNotification(title, { body, tag, icon:'icons/icon-192-v2.png', badge:'icons/icon-192-v2.png' });
       }else{
         new Notification(title, { body });
       }

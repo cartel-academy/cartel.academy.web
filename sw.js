@@ -1,4 +1,4 @@
-const CACHE = 'fxcartel-v96';
+const CACHE = 'fxcartel-v97';
 const ASSETS = [
   'index.html',
   'portal.html',
@@ -16,10 +16,10 @@ const ASSETS = [
   'pdfjs/web/viewer.css',
   'pdfjs/build/pdf.mjs',
   'pdfjs/build/pdf.worker.mjs',
-  'icons/icon-180.png',
-  'icons/icon-192.png',
-  'icons/icon-512.png',
-  'icons/favicon-48.png',
+  'icons/icon-180-v2.png',
+  'icons/icon-192-v2.png',
+  'icons/icon-512-v2.png',
+  'icons/favicon-48-v2.png',
   'assets/logo.png',
   'assets/logo-dark.png',
   'assets/mentor-salih.jpg',

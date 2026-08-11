@@ -66,6 +66,39 @@ don't let this file drift from them.
 | `DEPLOYMENT.md` | GitHub repo setup → Render connection → CI/CD pipeline walkthrough |
 | `PAID-CHECKOUT-TEST-PLAN.md` | Manual Paymob-sandbox checkout test plan (not automatable — see Testing below) |
 
+## Brand assets (logo/icons)
+
+- **`assets/logo.png`** — the wide horizontal lockup (teal `#125B52` "FX"
+  + gold `#FFBF00` triangle + **white** "CARTEL"), used in every page's
+  `.topbar`/`footer`, both of which are dark (`#000` → navy gradient).
+- **`assets/logo-dark.png`** — same horizontal lockup with **black**
+  "CARTEL" instead, for a light background. Not currently referenced by
+  any page (every header/footer on the site is dark) — kept correct and
+  on-brand for whenever a light-background placement is needed; don't
+  delete it as "unused," and don't recolor it back to anything
+  low-contrast against its own glyphs.
+- **`icons/favicon-*-v2.png`** (48/180/192/512) — the square icon-only
+  mark (teal "FX" + gold triangle, no wordmark — a wordmark doesn't read
+  at favicon sizes), referenced from every page's `<head>`,
+  `manifest.webmanifest`, and `sw.js`'s precache list.
+- **Icon filenames carry a `-v2` (etc.) suffix on purpose**:
+  `render.yaml` sets `Cache-Control: public, max-age=31536000, immutable`
+  on everything under `/icons/*`, so browsers that already fetched an old
+  icon **will not re-check it for a year** even on a hard refresh —
+  in-place overwrites silently fail to propagate. If you ever need to
+  change an icon file again, add a new version suffix and update every
+  reference (the `<link>` tags in all 6 HTML pages, `manifest.webmanifest`,
+  `sw.js`'s `ASSETS` array, and `app-notify.js`'s notification
+  `icon`/`badge`) rather than overwriting the file in place. `assets/*`
+  has no such rule, so `logo.png`/`logo-dark.png` can be overwritten
+  in-place safely.
+- Whenever any precached file's bytes change (including the above),
+  **bump `sw.js`'s `CACHE` version string** (e.g. `fxcartel-v96` →
+  `fxcartel-v97`) — `sw.js` itself is `no-cache`, but its own Cache
+  Storage entries only refresh when the browser detects the service
+  worker script's content differs, which only happens if the `CACHE`
+  literal (or something else in the file) actually changes.
+
 ## Hosting & deploy (Render)
 
 - `render.yaml` declares: security headers (`X-Frame-Options`,
