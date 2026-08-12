@@ -26,6 +26,9 @@ services:
       - path: /docs/*
         name: Cache-Control
         value: "public, max-age=86400"
+      - path: /assets/hero-market-bg.mp4
+        name: Cache-Control
+        value: "public, max-age=604800"
     routes:
       - type: rewrite
         source: /portal

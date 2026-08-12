@@ -60,6 +60,15 @@
   --ink-onDark:#EAF1EF;
   --muted-onDark:#8FA6A2;
   --line-onDark:rgba(255,255,255,.10);
+  /* Motion tokens — centralizes easing/duration for the hero's GSAP-driven
+     motion so new animation code and future sections share one vocabulary
+     instead of hardcoding cubic-beziers per rule like the rest of the
+     page's CSS transitions already do. */
+  --ease-premium:cubic-bezier(.16,.8,.24,1);
+  --ease-smooth:cubic-bezier(.4,0,.2,1);
+  --motion-fast:.3s;
+  --motion-medium:.7s;
+  --motion-slow:1.4s;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
@@ -163,15 +172,67 @@ section{padding:84px 0}
 .hamburger{display:none;background:none;border:none;cursor:pointer;padding:6px;flex-direction:column;gap:5px}
 .hamburger span{width:22px;height:2px;background:#fff;display:block;border-radius:2px}
 
-/* ---------- HERO ---------- */
-.hero{position:relative;overflow:hidden;padding:72px 0 96px;background:var(--bg-onDark)}
-.hero .wrap{position:relative;z-index:1}
+/* ---------- HERO ----------
+   Layer stack (back to front): .hero-bg-photo (the poster frame as a
+   plain CSS background — always visible, the permanent fallback) ->
+   .hero-bg-video (the actual video, opacity:0 until app.js confirms it
+   can actually play, then crossfades over the photo via .is-active —
+   if that never happens, the photo underneath just stays put) ->
+   .hero-lines (thin SVG market-line depth accents, parallax at a
+   different rate than the video) -> .hero-bg-scrim (gradient for text
+   contrast) -> .wrap content. This two-layer split (photo always on,
+   video optional overlay) is what makes prefers-reduced-motion/slow-
+   connection visitors see a correct static image instead of nothing —
+   a single <video poster> element can't do this, since opacity:0 on
+   the video hides its poster too. */
+.hero{position:relative;z-index:0;overflow:hidden;padding:72px 0 96px;background:var(--bg-onDark);min-height:100svh;display:flex;align-items:center}
+.hero-bg-photo{
+  position:absolute;inset:0;z-index:-3;
+  background-image:url('assets/hero-market-bg.jpg');
+  background-size:cover;background-position:center;
+}
+.hero-bg-video{
+  position:absolute;inset:0;z-index:-2;
+  width:100%;height:100%;object-fit:cover;object-position:center center;
+  opacity:0;transition:opacity var(--motion-slow) var(--ease-premium);
+}
+.hero-bg-video.is-active{opacity:1}
+.hero-lines{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;opacity:.55}
+.hero-lines svg{position:absolute;width:140%;height:auto;left:-20%}
+.hero-lines .line-a{top:18%;stroke:var(--gold-soft)}
+.hero-lines .line-b{bottom:14%;stroke:var(--navy-2)}
+.hero-bg-scrim{
+  position:absolute;inset:0;z-index:0;
+  background:linear-gradient(180deg,
+    rgba(18,42,64,.55) 0%,
+    rgba(18,42,64,.5) 45%,
+    rgba(18,42,64,.78) 100%);
+}
+.hero .wrap{position:relative;z-index:1;width:100%}
 .hero-copy{max-width:760px;margin:0 auto;text-align:center}
 .hero-copy .hero-actions{justify-content:center}
 .hero h1{font-size:clamp(28px,4.4vw,50px);color:var(--ink-onDark);margin:16px 0 18px}
 .hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--gold) 0%,var(--gold-2) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
 .hero p.lead{font-size:17px;color:var(--muted-onDark);max-width:560px;margin:0 auto 28px}
 .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.hero-scroll-cue{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);z-index:1;display:flex;flex-direction:column;align-items:center;gap:6px;opacity:.7;transition:opacity var(--motion-fast) var(--ease-smooth)}
+.hero-scroll-cue span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-onDark)}
+.hero-scroll-cue svg{stroke:var(--gold);animation:heroScrollCue 1.8s ease-in-out infinite}
+.hero-scroll-cue.is-hidden{opacity:0;pointer-events:none}
+@keyframes heroScrollCue{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+@media(prefers-reduced-motion:reduce){.hero-scroll-cue svg{animation:none}}
+@media(max-width:960px){
+  .hero-bg-photo{background-position:center 42%}
+  .hero-bg-video{object-position:center 42%}
+}
+@media(min-width:961px){
+  .hero-bg-photo{background-position:center 40%}
+  .hero-bg-video{object-position:center 40%}
+}
+@media(max-height:520px) and (orientation:landscape){
+  .hero{min-height:auto}
+  .hero-scroll-cue{display:none}
+}
 
 /* ---------- BRAND MARQUEE ----------
    Full-bleed, single-line, edge-to-edge scrolling strip, sitting
@@ -716,15 +777,26 @@ footer{background:#000;color:var(--paper);padding:60px 0 26px}
 
 <!-- HERO -->
 <main id="home">
-<section class="hero">
+<section class="hero" id="heroSection">
+  <div class="hero-bg-photo" aria-hidden="true"></div>
+  <video id="heroVideo" class="hero-bg-video" data-src="assets/hero-market-bg.mp4" muted playsinline loop preload="metadata" aria-hidden="true"></video>
+  <div class="hero-lines" aria-hidden="true">
+    <svg class="line-a" viewBox="0 0 800 120" fill="none" stroke-width="1.5"><path d="M0,80 L80,60 L160,72 L240,40 L320,55 L400,20 L480,48 L560,30 L640,58 L720,35 L800,50" /></svg>
+    <svg class="line-b" viewBox="0 0 800 120" fill="none" stroke-width="1.5"><path d="M0,40 L90,55 L170,30 L250,60 L330,45 L410,70 L490,42 L570,65 L650,38 L730,60 L800,44" /></svg>
+  </div>
+  <div class="hero-bg-scrim" aria-hidden="true"></div>
   <div class="wrap">
-    <div class="hero-copy reveal">
+    <div class="hero-copy">
       <h1>Trade the markets with <em>clarity</em>, not noise.</h1>
       <div class="hero-actions">
-        <a href="#courses" class="btn btn-gold">View courses</a>
+        <a href="#courses" class="btn btn-gold" id="heroPrimaryCta">View courses</a>
         <a href="https://wa.me/971508841001" class="btn btn-ghost" target="_blank" rel="noopener" onclick="window.FXCPixel&&FXCPixel.track('Contact')">Talk to an advisor</a>
       </div>
     </div>
+  </div>
+  <div class="hero-scroll-cue" id="heroScrollCue" aria-hidden="true">
+    <span>Scroll</span>
+    <svg width="14" height="20" viewBox="0 0 14 20" fill="none"><path d="M7 1v14M2 10l5 5 5-5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
   </div>
 </section>
 
@@ -1090,6 +1162,12 @@ footer{background:#000;color:var(--paper);padding:60px 0 26px}
   </div>
 </div>
 
+<!-- Hero motion only — GSAP/ScrollTrigger, CDN like the Supabase JS pattern
+     already used in portal.html (no build step on this site, so no npm
+     install). app.js checks `typeof gsap` before using it, so a CDN
+     failure falls back to the existing CSS-only .reveal fade. -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
 <script src="app-notify.js"></script>
 <script src="pwa-install.js"></script>
 <script src="app.js"></script>

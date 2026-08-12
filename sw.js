@@ -1,4 +1,4 @@
-const CACHE = 'fxcartel-v105';
+const CACHE = 'fxcartel-v106';
 const ASSETS = [
   'index.html',
   'portal.html',
@@ -33,6 +33,7 @@ const ASSETS = [
   'assets/gallery-classroom-students.jpg',
   'assets/ceo-jeswin-joy.jpg',
   'assets/hero-cartel-academy.jpg',
+  'assets/hero-market-bg.jpg',
   'assets/brand-bg.jpg'
 ];
 
@@ -63,6 +64,14 @@ self.addEventListener('fetch', e => {
   // Network-first for API calls; cache-first for static assets
   if (request.url.includes('supabase.co')) {
     return; // let network handle it
+  }
+  // Video is never added to Cache Storage — a multi-MB file going through
+  // caches.open(CACHE).then(c=>c.addAll(ASSETS)) on install risks bloating
+  // (or, if the fetch fails, silently aborting) the whole precache. Let
+  // the browser's own HTTP cache handle it instead, governed by
+  // render.yaml's Cache-Control rule for /assets/*.mp4.
+  if (request.url.endsWith('.mp4')) {
+    return; // let network/browser HTTP cache handle it
   }
   e.respondWith(
     caches.match(request).then(cached => cached || fetch(request).then(res => {

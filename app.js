@@ -523,6 +523,128 @@ if('Notification' in window && Notification.permission === 'granted' && window.F
   sections.forEach(s => io.observe(s.el));
 })();
 
+/* ---------- HERO: IMAGE -> VIDEO REVEAL ----------
+   Loads as the static poster only (see .hero-bg-video's poster attribute)
+   — no autoplay on page load, no bandwidth spent on a video the visitor
+   might never scroll past. Starts on whichever comes first: a real
+   interaction (hover/mouse move, tap, scroll, key press) anywhere on the
+   page, or a 0.001-second fallback timer — effectively immediate, firing
+   on arrival for anyone who doesn't happen to interact first. Requiring a
+   genuine gesture before calling play() (when that's what triggers it) is
+   also what makes autoplay reliable on iOS Safari, which otherwise blocks
+   unmuted-looking video starts. Skipped entirely for prefers-reduced-
+   motion, and for visitors on a metered/slow connection
+   (navigator.connection.saveData or 2G) who are better served by the
+   static poster alone — this is independent of whether GSAP loaded
+   below, since it's plain video playback, not a GSAP tween. */
+function initHeroVideoReveal(){
+  const video = document.getElementById('heroVideo');
+  const hero = document.getElementById('heroSection');
+  if(!video || !hero) return;
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const conn = navigator.connection || navigator.webkitConnection || navigator.mozConnection;
+  if(conn && (conn.saveData || /^(slow-2g|2g)$/.test(conn.effectiveType || ''))) return;
+
+  let activated = false;
+  let fallbackTimer = null;
+  function activate(){
+    if(activated) return;
+    activated = true;
+    if(fallbackTimer) clearTimeout(fallbackTimer);
+    video.src = video.dataset.src;
+    video.load();
+    const reveal = () => {
+      video.play().catch(()=>{});
+      requestAnimationFrame(()=> video.classList.add('is-active'));
+    };
+    if(video.readyState >= 2) reveal();
+    else video.addEventListener('loadeddata', reveal, { once:true });
+  }
+  ['mousemove','pointerdown','touchstart','wheel','keydown','scroll'].forEach(ev=>
+    document.addEventListener(ev, activate, { passive:true, once:true })
+  );
+  fallbackTimer = setTimeout(activate, 1);
+
+  // Battery/CPU: pause while the hero is scrolled offscreen or the tab
+  // is hidden, resume when it's back — a looping background video keeps
+  // decoding frames whether or not anyone can see it otherwise.
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(!activated) return;
+        if(entry.isIntersecting) video.play().catch(()=>{});
+        else video.pause();
+      });
+    }, { threshold: 0.1 });
+    io.observe(hero);
+  }
+  document.addEventListener('visibilitychange', ()=>{
+    if(!activated) return;
+    if(document.hidden){ video.pause(); return; }
+    const r = hero.getBoundingClientRect();
+    if(r.top < window.innerHeight && r.bottom > 0) video.play().catch(()=>{});
+  });
+}
+
+/* ---------- HERO: SCROLL MOTION ----------
+   GSAP + ScrollTrigger, loaded via CDN <script> tags in index.html only
+   (see the tags before app-notify.js) — guarded by a typeof check so a
+   CDN failure, an ad-blocker, or any other page that doesn't load these
+   scripts just no-ops here, leaving the hero fully functional via plain
+   CSS (poster/video still plays via initHeroVideoReveal above, copy is
+   visible by default with no animation). prefers-reduced-motion disables
+   every transform-based effect below (video scale, market-line parallax,
+   copy entrance, magnetic CTA) while still running the scroll-cue
+   visibility logic, which is a opacity toggle rather than motion. */
+function initHeroScrollMotion(){
+  if(typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  const hero = document.getElementById('heroSection');
+  const copy = document.querySelector('.hero-copy');
+  if(!hero || !copy) return;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  if(!reduceMotion){
+    gsap.from(copy, { opacity:0, y:28, duration:1, ease:'power2.out', delay:.15 });
+
+    const video = document.getElementById('heroVideo');
+    if(video){
+      gsap.to(video, {
+        scale:1.08, ease:'none',
+        scrollTrigger:{ trigger:hero, start:'top top', end:'bottom top', scrub:true }
+      });
+    }
+
+    const lines = hero.querySelectorAll('.hero-lines svg');
+    if(lines[0]) gsap.to(lines[0], { xPercent:-6, ease:'none', scrollTrigger:{ trigger:hero, start:'top top', end:'bottom top', scrub:true } });
+    if(lines[1]) gsap.to(lines[1], { xPercent:8, ease:'none', scrollTrigger:{ trigger:hero, start:'top top', end:'bottom top', scrub:.6 } });
+  }
+
+  const cue = document.getElementById('heroScrollCue');
+  if(cue){
+    ScrollTrigger.create({
+      trigger:hero, start:'top top', end:'+=150',
+      onUpdate:self=> cue.classList.toggle('is-hidden', self.progress > 0.1)
+    });
+  }
+
+  // Magnetic CTA — desktop, fine-pointer only; skipped under reduced
+  // motion and never attached on touch devices, so nothing here depends
+  // on a mouse existing.
+  const cta = document.getElementById('heroPrimaryCta');
+  if(cta && !reduceMotion && window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+    const xTo = gsap.quickTo(cta, 'x', { duration:.4, ease:'power3' });
+    const yTo = gsap.quickTo(cta, 'y', { duration:.4, ease:'power3' });
+    cta.addEventListener('mousemove', e=>{
+      const r = cta.getBoundingClientRect();
+      xTo((e.clientX - r.left - r.width/2) * .25);
+      yTo((e.clientY - r.top - r.height/2) * .25);
+    });
+    cta.addEventListener('mouseleave', ()=>{ xTo(0); yTo(0); });
+  }
+}
+
 /* ---------- SCROLL REVEAL ----------
    Fades + rises .reveal elements into place the first time each crosses
    into view (see the .reveal/.reveal.show CSS). Runs after the
@@ -581,4 +703,6 @@ renderTestimonials();
 renderFaqs();
 initScrollReveal();
 initCountUp();
+initHeroVideoReveal();
+initHeroScrollMotion();
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closeCheckout(); closeInstallModal(); } });
