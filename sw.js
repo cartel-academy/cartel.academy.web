@@ -1,4 +1,4 @@
-const CACHE = 'fxcartel-v104';
+const CACHE = 'fxcartel-v105';
 const ASSETS = [
   'index.html',
   'portal.html',
