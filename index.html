@@ -163,44 +163,8 @@ section{padding:84px 0}
 .hamburger{display:none;background:none;border:none;cursor:pointer;padding:6px;flex-direction:column;gap:5px}
 .hamburger span{width:22px;height:2px;background:#fff;display:block;border-radius:2px}
 
-/* ---------- HERO ----------
-   Loads as a still photograph — crisp, no flicker, no layout shift —
-   then quietly comes to life: the first time the visitor moves the
-   mouse, touches, scrolls or presses a key, .hero-bg-video fades in
-   over it with a slight zoom-out and brightness lift (see
-   initHeroVideoReveal() in app.js), settles into a muted, looping
-   background, and the photo stays underneath as a permanent fallback.
-   .hero-bg-scrim layers the same navy already used elsewhere at a
-   gradient opacity so either layer reads, only darkening enough at
-   the bottom for text contrast. background-position shifts toward the
-   left/right on narrow screens so the branded wall signage stays in
-   frame instead of being cropped out by a tall, narrow viewport. */
-.hero{position:relative;overflow:hidden;padding:72px 0 96px}
-.hero-bg-photo{
-  position:absolute;inset:0;z-index:-2;
-  background-image:url('assets/hero-cartel-academy.jpg');
-  background-size:cover;background-position:center;
-}
-.hero-bg-video{
-  position:absolute;inset:0;z-index:-1;
-  width:100%;height:100%;object-fit:cover;object-position:center;
-  opacity:0;transform:scale(1.03);filter:brightness(.9);
-  transition:opacity 2.2s cubic-bezier(.16,.8,.24,1),
-             transform 2.6s cubic-bezier(.16,.8,.24,1),
-             filter 2.2s cubic-bezier(.16,.8,.24,1);
-  pointer-events:none;
-}
-.hero-bg-video.is-active{opacity:1;transform:scale(1);filter:brightness(1)}
-.hero-bg-scrim{
-  position:absolute;inset:0;z-index:0;
-  background:linear-gradient(180deg,
-    rgba(18,42,64,.35) 0%,
-    rgba(18,42,64,.5) 55%,
-    rgba(18,42,64,.72) 100%);
-}
-@media(prefers-reduced-motion:reduce){
-  .hero-bg-video{display:none}
-}
+/* ---------- HERO ---------- */
+.hero{position:relative;overflow:hidden;padding:72px 0 96px;background:var(--bg-onDark)}
 .hero .wrap{position:relative;z-index:1}
 .hero-copy{max-width:760px;margin:0 auto;text-align:center}
 .hero-copy .hero-actions{justify-content:center}
@@ -520,8 +484,6 @@ footer{background:#000;color:var(--paper);padding:60px 0 26px}
   .checkout{width:100%;min-width:0;max-width:none}
   section{padding:60px 0}
   .hero{padding:56px 0}
-  .hero-bg-photo{background-position:75% center}
-  .hero-bg-video{object-position:75% center}
   .g360-stage{--g360-w:180px;--g360-h:230px}
 }
 @media(max-width:640px){
@@ -755,9 +717,6 @@ footer{background:#000;color:var(--paper);padding:60px 0 26px}
 <!-- HERO -->
 <main id="home">
 <section class="hero">
-  <div class="hero-bg-photo" aria-hidden="true"></div>
-  <video id="heroVideo" class="hero-bg-video" data-src="assets/hero-video.mp4" poster="assets/hero-cartel-academy.jpg" muted playsinline loop preload="none" aria-hidden="true"></video>
-  <div class="hero-bg-scrim" aria-hidden="true"></div>
   <div class="wrap">
     <div class="hero-copy reveal">
       <h1>Trade the markets with <em>clarity</em>, not noise.</h1>
