@@ -184,17 +184,32 @@ section{padding:84px 0}
    video optional overlay) is what makes prefers-reduced-motion/slow-
    connection visitors see a correct static image instead of nothing —
    a single <video poster> element can't do this, since opacity:0 on
-   the video hides its poster too. */
+   the video hides its poster too.
+
+   The source video is a vertical 720x1280 clip that's itself letterboxed
+   — roughly the top/bottom 6-7% of every frame is solid black (measured
+   directly from extracted frames, not guessed). object-fit:cover alone
+   only crops based on the *container's* aspect ratio, so on a narrow
+   mobile viewport (which is close to the video's own 9:16 shape) almost
+   none of that gets cropped away and the black bars stay visible. The
+   scale(1.18) below is a fixed extra zoom, applied uniformly on top of
+   whatever object-fit:cover already computed, specifically to push those
+   bars outside the visible box on every viewport size — it's not a
+   responsive/breakpoint value, it's a fixed correction for the source
+   asset. GSAP's scroll-scrub (app.js) animates from this same 1.18
+   baseline, not from 1.0, so the two don't fight each other. */
 .hero{position:relative;z-index:0;overflow:hidden;padding:72px 0 96px;background:var(--bg-onDark);min-height:100svh;display:flex;align-items:center}
 .hero-bg-photo{
   position:absolute;inset:0;z-index:-3;
   background-image:url('assets/hero-market-bg.jpg');
   background-size:cover;background-position:center;
+  transform:scale(1.18);
 }
 .hero-bg-video{
   position:absolute;inset:0;z-index:-2;
   width:100%;height:100%;object-fit:cover;object-position:center center;
-  opacity:0;transition:opacity var(--motion-slow) var(--ease-premium);
+  opacity:0;transform:scale(1.18);
+  transition:opacity var(--motion-slow) var(--ease-premium);
 }
 .hero-bg-video.is-active{opacity:1}
 .hero-lines{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;opacity:.55}
@@ -221,11 +236,27 @@ section{padding:84px 0}
 .hero-scroll-cue.is-hidden{opacity:0;pointer-events:none}
 @keyframes heroScrollCue{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 @media(prefers-reduced-motion:reduce){.hero-scroll-cue svg{animation:none}}
+/* Mobile/tablet — closest to the source video's own aspect ratio, so
+   object-fit:cover crops the least here; center 42% keeps the busiest
+   chart cluster (candles + market lines) in frame rather than dead
+   center, which sits slightly lower in the ticker/volume-bar area. */
 @media(max-width:960px){
   .hero-bg-photo{background-position:center 42%}
   .hero-bg-video{object-position:center 42%}
 }
-@media(min-width:961px){
+/* Laptop — 961-1440px hero bands are wide-but-not-huge (roughly 1.4:1 to
+   1.7:1 once min-height:100svh is factored in), so object-fit:cover is
+   already cropping significantly more than mobile; nudging further up
+   the frame (36%) and adding a touch more zoom keeps the composition
+   from reading as an arbitrary strip of the source video. */
+@media(min-width:961px) and (max-width:1440px){
+  .hero-bg-photo{background-position:center 36%;transform:scale(1.22)}
+  .hero-bg-video{object-position:center 36%;transform:scale(1.22)}
+}
+/* Large desktop — very wide/short hero bands crop aggressively no matter
+   what; 40% reads better here than the laptop tier's 36% once that much
+   width is in play. */
+@media(min-width:1441px){
   .hero-bg-photo{background-position:center 40%}
   .hero-bg-video{object-position:center 40%}
 }

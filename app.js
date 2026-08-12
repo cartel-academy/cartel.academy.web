@@ -610,8 +610,12 @@ function initHeroScrollMotion(){
 
     const video = document.getElementById('heroVideo');
     if(video){
+      // Relative increment, not an absolute target — the CSS base scale
+      // differs per breakpoint (1.18 baseline, 1.22 on the laptop tier;
+      // see the .hero-bg-video CSS comment), and "+=" reads whatever
+      // that computed value actually is instead of assuming 1.0.
       gsap.to(video, {
-        scale:1.08, ease:'none',
+        scale:'+=0.08', ease:'none',
         scrollTrigger:{ trigger:hero, start:'top top', end:'bottom top', scrub:true }
       });
     }
