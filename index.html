@@ -100,8 +100,17 @@ section{padding:84px 0}
   background:linear-gradient(120deg,#000 0%,#1a1a1a 55%,#000 100%);
   border-bottom:1px solid var(--line-onDark);
 }
-.topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:66px;gap:12px}
+.topbar .wrap{position:relative;display:flex;align-items:center;justify-content:space-between;height:66px;gap:12px}
+/* Logo sits dead-center in the topbar regardless of what's either side
+   (nav links on desktop, nothing but the hamburger on mobile) — taken
+   out of the flex flow entirely and centered via absolute positioning
+   so it doesn't shift based on sibling width. The remaining flex
+   children (.nav-links, .top-cta) lay out normally around it; .top-cta
+   gets margin-left:auto below so it still pins to the right even when
+   it's the only flex child left (e.g. on mobile, where .nav-links is
+   hidden). */
 .brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:20px;font-weight:600;letter-spacing:-.02em;color:var(--gold)}
+.topbar .brand{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
 .brand-logo{height:26px;width:auto;display:block}
 .nav-links{display:flex;gap:26px;align-items:center}
 .nav-links a{position:relative;font-size:14px;font-weight:500;color:var(--ink-onDark);opacity:.82;transition:opacity .2s;padding-bottom:4px}
@@ -140,20 +149,12 @@ section{padding:84px 0}
 .nav-dropdown.open .nav-dropdown-menu{opacity:1;visibility:visible;transform:translate(-50%,0)}
 .nav-dropdown-menu a{display:block;padding:10px 14px;font-size:14px;font-weight:500;color:var(--ink);opacity:.85;border-radius:6px;white-space:nowrap;transition:background .15s,color .15s}
 .nav-dropdown-menu a:hover{opacity:1;background:var(--bg-2);color:var(--navy)}
-.top-cta{display:flex;gap:10px;align-items:center}
+.top-cta{display:flex;gap:10px;align-items:center;margin-left:auto}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;border-radius:10px;padding:11px 18px;transition:transform .15s ease,box-shadow .2s ease,background .2s}
 /* square download icon button — keeps a fixed 1:1 ratio */
 .btn-icon{width:42px;height:42px;flex:0 0 42px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--gold);display:grid;place-items:center;cursor:pointer;transition:transform .15s,background .2s,border-color .2s,color .2s}
 .btn-icon:hover{background:var(--navy);color:var(--gold);border-color:var(--navy)}
 .btn-icon:active{transform:translateY(1px)}
-.btn-enroll{height:42px;padding:0 22px}
-/* Desktop/laptop nav already has "View courses" reachable via the
-   Courses link and the hero CTA, so the topbar Enroll button is
-   redundant there — kept only for mobile/tablet, where the collapsed
-   nav means it's the one visible CTA before opening the drawer. */
-@media(min-width:961px){
-  .btn-enroll{display:none}
-}
 .btn:active{transform:translateY(1px)}
 .btn-gold{background:linear-gradient(90deg,var(--gold) 0%,var(--gold-2) 100%);color:var(--white)}
 .btn-gold:hover{box-shadow:0 8px 22px rgba(250,188,20,.4)}
@@ -585,7 +586,6 @@ footer{background:#000;color:var(--paper);padding:60px 0 26px}
   .brand-logo{height:22px}
   /* header buttons keep fixed ratio — never stretch */
   .btn-icon{width:38px;height:38px;flex:0 0 38px}
-  .btn-enroll{height:38px;padding:0 16px;font-size:13px}
   .hero{padding:44px 0 64px}
   .hero h1{font-size:clamp(28px,8vw,40px)}
   .hero-actions{gap:10px}
@@ -603,7 +603,6 @@ footer{background:#000;color:var(--paper);padding:60px 0 26px}
 }
 @media(max-width:380px){
   .brand{font-size:16px}
-  .btn-enroll{padding:0 13px}
   .top-cta{gap:7px}
 }
 /* mobile nav drawer */
@@ -780,7 +779,6 @@ footer{background:#000;color:var(--paper);padding:60px 0 26px}
       <a href="#contact" data-nav="contact">Contact</a>
     </nav>
     <div class="top-cta">
-      <a href="#courses" class="btn btn-gold btn-enroll" id="enrollBtnTop">Enroll</a>
       <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </div>

@@ -475,17 +475,6 @@ if('serviceWorker' in navigator){
    dashboard (portal.html) — there's no standalone top-bar control on this page. */
 if('Notification' in window && Notification.permission === 'granted' && window.FXCNotify){ FXCNotify.maybeShowDaily(); }
 
-/* ---------- HIDE "ENROLL" IF ALREADY A LOGGED-IN STUDENT ---------- */
-(function hideEnrollIfLoggedIn(){
-  try{
-    const saved = JSON.parse(localStorage.getItem('fxc_session'));
-    if(saved && saved.email && saved.token){
-      const btn = document.getElementById('enrollBtnTop');
-      if(btn) btn.style.display = 'none';
-    }
-  }catch(e){}
-})();
-
 /* ---------- NAV: ACTIVE-SECTION INDICATOR ----------
    Keeps the sliding underline (see .nav-links a::after) parked under
    whichever nav item corresponds to the section currently in view,
