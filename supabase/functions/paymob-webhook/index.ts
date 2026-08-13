@@ -62,7 +62,7 @@ async function sendMetaPurchaseEvent(row: { email?: string; phone?: string; cour
         event_name: 'Purchase',
         event_time: Math.floor(Date.now() / 1000),
         action_source: 'website',
-        event_source_url: 'https://cartel.academy/', // update if the production domain changes
+        event_source_url: 'https://www.cartel.academy/', // update if the production domain changes
         user_data: userData,
         custom_data: {
           currency: 'AED',

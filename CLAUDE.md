@@ -58,7 +58,7 @@ don't let this file drift from them.
 | `pdfjs/` | Vendored Mozilla pdf.js (v5.4.149, MIT, trimmed build — no source maps, English-only, no demo/debug panel). Same-origin so `portal.html` can hook `pagechanging` for "resume where you left off" (`bookmarks.last_page`) — the browser's native PDF viewer can't report that back |
 | `docs/` | Course PDFs, served directly by the static host (no external file storage) |
 | `supabase/schema.sql` | Postgres schema: `students`, `leads`, `bookmarks` tables + RLS + `check_enrollment`/`link_account` RPCs |
-| `supabase/functions/` | Edge Functions: `checkout`, `contact`, `create-payment`, `paymob-webhook`, `send-test-email` |
+| `supabase/functions/` | Edge Functions: `checkout`, `contact`, `create-payment`, `paymob-webhook`, `capi-event`, `send-test-email` |
 | `render.yaml` | Render static-site config (headers, cache rules, pretty-URL rewrites) — see below |
 | `.github/workflows/deploy.yml` | CI validation only — see CI/CD section |
 | `.mcp.json` | Project-level MCP config: Supabase MCP server, project ref `dyatxhudfbvburljycky` |
@@ -178,6 +178,16 @@ shared CORS-header pattern (`Access-Control-Allow-Origin: *` +
   confirmation. Client-side code (`app.js`, `meta-pixel.js`) deliberately
   never fires `Purchase` itself, since a checkout redirect isn't proof of
   payment.
+- **`capi-event`** — fire-and-forget server-side mirror of client-tracked
+  Meta Pixel events (`PageView`, `ViewContent`, `InitiateCheckout`,
+  `Contact`, `Lead`, `CompleteRegistration`, `AddPaymentInfo`), called
+  from `meta-pixel.js`'s `fxcTrack()`. Relays to the Meta Conversions
+  API using the same `META_PIXEL_ID`/`META_CAPI_ACCESS_TOKEN` secrets as
+  `paymob-webhook`, sharing one `event_id` per event with the matching
+  browser-side `fbq()` call so Meta dedupes rather than double-counts.
+  Its `ALLOWED_EVENTS` allowlist deliberately excludes `Purchase` — that
+  stays exclusive to `paymob-webhook`. Silently no-ops if the two Meta
+  secrets aren't set, same convention as `paymob-webhook`.
 - **`send-test-email`** — optional one-off Resend API sanity check, not
   part of the normal site flow; delete once Resend is confirmed working.
 
