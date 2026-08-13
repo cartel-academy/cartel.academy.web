@@ -6,4 +6,4 @@ Disallow: /trading-bg-animation.html
 Disallow: /docs/
 Disallow: /pdfjs/
 
-Sitemap: https://cartel.academy/sitemap.xml
+Sitemap: https://www.cartel.academy/sitemap.xml
