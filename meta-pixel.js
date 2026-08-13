@@ -20,7 +20,7 @@
    attempts, not completions, and would count them before Paymob has
    even approved the charge.
    ============================================================ */
-const META_PIXEL_ID = '4045168832460635';
+const META_PIXEL_ID = '1516497466447028';
 
 const FXC_CONSENT_KEY = 'fxc_cookie_consent'; // localStorage: 'accepted' | 'rejected'
 
