@@ -226,9 +226,17 @@ it.
 - **Market ticker / calculators are illustrative-only**, clearly labelled
   — no live financial data or profit claims, for compliance. The same
   rule applies to market-move notification copy.
-- **Cookie consent gates the Meta Pixel** — `fbq` only loads after the
-  visitor accepts the banner (`localStorage['fxc_cookie_consent']`).
-  Don't load pixel/tracking scripts before that gate.
+- **Cookie consent gates the Meta Pixel via Meta's own Consent Mode**
+  (`fbq('consent','revoke'/'grant')`), not by withholding the script.
+  `fbevents.js` loads and `fbq('init', ...)` runs unconditionally on
+  every page load (immediately preceded by `consent:'revoke'`), so
+  Meta's own tooling (Events Manager health checks, the "Add events" URL
+  scanner, Pixel Helper) can see the pixel is installed — while revoked,
+  Meta's SDK guarantees no event data is sent and no cookies are set.
+  Real tracking only starts once a visitor accepts the banner
+  (`localStorage['fxc_cookie_consent']`), which calls
+  `fbq('consent','grant')`. Don't go back to withholding the script
+  entirely — that made the pixel undetectable by Meta's own diagnostics.
 - **Graceful demo-mode fallback** — checkout/login/contact calls should
   never dead-end the UI if an Edge Function or Paymob is unreachable;
   preserve existing try/catch + toast fallback patterns in `app.js`.
