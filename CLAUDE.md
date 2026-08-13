@@ -45,7 +45,7 @@ don't let this file drift from them.
 | `index.html` | Main one-page site (hero, courses, gallery, testimonials, FAQ, contact) |
 | `app.js` | Checkout, topics, PWA install, notifications, Supabase checkout/contact calls. Course/pricing data (`COURSES`, `TOPICS`) lives here |
 | `app-notify.js` | Shared foreground notification helper (`window.FXCNotify`), used by `index.html`, `portal.html`, `tools.html` |
-| `meta-pixel.js` | Meta Pixel bootstrap + cookie-consent banner. Only loads `fbq`/the pixel after the visitor accepts (`localStorage['fxc_cookie_consent']`) |
+| `meta-pixel.js` | Meta Pixel base snippet — loads `fbq` and tracks `PageView` unconditionally on every page load, no cookie-consent gate |
 | `pwa-install.js` | PWA install-prompt handling |
 | `sw.js` | Service worker — offline cache, foreground notification `showNotification()` |
 | `portal.html` | Student portal: Supabase Auth login (email OTP + password), PDF viewer, Zoom classes, progress marking. PWA `start_url` |
@@ -226,17 +226,19 @@ it.
 - **Market ticker / calculators are illustrative-only**, clearly labelled
   — no live financial data or profit claims, for compliance. The same
   rule applies to market-move notification copy.
-- **Cookie consent gates the Meta Pixel via Meta's own Consent Mode**
-  (`fbq('consent','revoke'/'grant')`), not by withholding the script.
-  `fbevents.js` loads and `fbq('init', ...)` runs unconditionally on
-  every page load (immediately preceded by `consent:'revoke'`), so
-  Meta's own tooling (Events Manager health checks, the "Add events" URL
-  scanner, Pixel Helper) can see the pixel is installed — while revoked,
-  Meta's SDK guarantees no event data is sent and no cookies are set.
-  Real tracking only starts once a visitor accepts the banner
-  (`localStorage['fxc_cookie_consent']`), which calls
-  `fbq('consent','grant')`. Don't go back to withholding the script
-  entirely — that made the pixel undetectable by Meta's own diagnostics.
+- **Meta Pixel loads and tracks unconditionally, no cookie-consent gate.**
+  `meta-pixel.js` is Meta's own base pixel snippet (`fbq('init', ...)` +
+  `fbq('track','PageView')` fire on every page load) plus a matching
+  literal `<noscript>` fallback `<img>` pixel in each page's `<head>`.
+  This was a deliberate, explicit user decision (2026-08) to drop the
+  earlier cookie-consent-banner gating (both the withhold-the-script
+  version and the later Consent Mode/`revoke`+`grant` version) — Meta's
+  automated diagnostics (Events Manager health checks, the "Add events"
+  URL scanner, Pixel Helper) couldn't reliably see the pixel under either
+  gated approach. `privacy.html`'s "Advertising & Meta Pixel" section was
+  updated to match (no more references to a cookie banner choice). Don't
+  reintroduce consent gating here without a new, explicit instruction —
+  it's a compliance-relevant tradeoff the user made knowingly.
 - **Graceful demo-mode fallback** — checkout/login/contact calls should
   never dead-end the UI if an Edge Function or Paymob is unreachable;
   preserve existing try/catch + toast fallback patterns in `app.js`.
