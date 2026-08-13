@@ -15,8 +15,14 @@
    META_PIXEL_ID is a public identifier (visible in the page source of
    any site running Meta Pixel — not a secret), so it's safe to hardcode
    here the same way SUPABASE_URL is hardcoded in app.js. This file is
-   standalone (loaded on pages that don't include app.js), so it
-   declares its own SUPABASE_URL rather than depending on app.js's copy.
+   standalone (loaded on pages that don't include app.js, and loaded
+   before app.js on the one page — index.html — that includes both), so
+   it declares its own copies of the Supabase URL/anon key rather than
+   depending on app.js's. Prefixed FXC_ to avoid colliding with app.js's
+   own top-level `const SUPABASE_URL`/`SUPABASE_ANON_KEY` — classic
+   (non-module) <script> tags share one global scope, so two `const`
+   declarations of the same name on the same page throws a SyntaxError
+   that silently aborts the second script's entire execution.
 
    Every tracked event also gets mirrored server-side via the
    capi-event Edge Function (supabase/functions/capi-event/index.ts),
@@ -38,8 +44,9 @@
    relay a "Purchase" event, as a second layer against that.
    ============================================================ */
 const META_PIXEL_ID = '1516497466447028';
-const SUPABASE_URL = 'https://dyatxhudfbvburljycky.supabase.co';
-const CAPI_ENDPOINT = `${SUPABASE_URL}/functions/v1/capi-event`;
+const FXC_SUPABASE_URL = 'https://dyatxhudfbvburljycky.supabase.co';
+const FXC_SUPABASE_ANON_KEY = 'sb_publishable_BaA3skRU3e8dNN93rf_eUw_t9odHtoU';
+const CAPI_ENDPOINT = `${FXC_SUPABASE_URL}/functions/v1/capi-event`;
 
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -70,7 +77,11 @@ function fxcTrack(eventName, params){
   try{
     fetch(CAPI_ENDPOINT, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: FXC_SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${FXC_SUPABASE_ANON_KEY}`,
+      },
       body: JSON.stringify({
         event_name: eventName,
         event_id: eventId,
